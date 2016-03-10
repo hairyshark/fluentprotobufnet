@@ -15,6 +15,7 @@ namespace FluentProtobufNet.Tests
         public string SKU { get; set; }
         public string Definition { get; set; }
         public Category MainCategory { get; set; }
+        public int ItemId { get; set; }
     }
 
     public class CategoryWithDescription : Category

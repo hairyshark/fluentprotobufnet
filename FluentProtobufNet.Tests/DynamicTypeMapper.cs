@@ -37,11 +37,15 @@ namespace FluentProtobufNet.Tests
 
         private static Tuple<Expression<Func<TMessage, object>>, bool> Build<TMessage>(PropertyInfo targetMember)
         {
-            var typeParam = Expression.Parameter(typeof(TMessage), "m");
+            ParameterExpression typeParam = Expression.Parameter(typeof(TMessage), "m");
 
-            var memberExpression = Expression.Property(typeParam, targetMember.Name);
+            MemberExpression memberExpression = Expression.Property(typeParam, targetMember.Name);
 
-            var expression = Expression.Lambda<Func<TMessage, object>>(memberExpression, typeParam);
+            UnaryExpression castedToObject = Expression.Convert(memberExpression, typeof(object));
+
+            //var expressionCall = Expression.Property(memberExpression, castedToObject);
+
+            var expression = Expression.Lambda<Func<TMessage, object>>(castedToObject, typeParam);
 
             var isReference = targetMember.PropertyType == typeof(TMessage);
 
