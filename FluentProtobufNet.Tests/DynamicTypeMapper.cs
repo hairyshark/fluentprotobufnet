@@ -43,8 +43,6 @@ namespace FluentProtobufNet.Tests
 
             UnaryExpression castedToObject = Expression.Convert(memberExpression, typeof(object));
 
-            //var expressionCall = Expression.Property(memberExpression, castedToObject);
-
             var expression = Expression.Lambda<Func<TMessage, object>>(castedToObject, typeParam);
 
             var isReference = targetMember.PropertyType == typeof(TMessage);
