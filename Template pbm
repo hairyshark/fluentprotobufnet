@@ -1,0 +1,7 @@
+public class $MessageType$Map : ClassMap<T><$MessageType$>
+{
+    public $MessageType$Map()
+    {
+        this.DynamicClassMap<$MessageType$Map, $MessageType$>();
+    }
+}
