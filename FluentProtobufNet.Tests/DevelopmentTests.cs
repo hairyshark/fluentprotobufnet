@@ -55,20 +55,28 @@ namespace FluentProtobufNet.Tests
     {
         public CategoryMap()
         {
-            Map(m => m.Name, 1);
-            Map(m => m.SubCategories, 2);
-            Map(m => m.Items, 3);
-            References(m => m.ParentCategory, 4);
+            this.DynamicClassMap<CategoryMap, Category>();
 
+//            Map(m => m.Name, 1);
+//            Map(m => m.SubCategories, 2);
+//            Map(m => m.Items, 3);
+//            References(m => m.ParentCategory, 4);
         }
+    }
+
+    public interface IDynamicMapper
+    {
+        void Map();
     }
 
     public class CategoryWithDescriptionMap : SubclassMap<CategoryWithDescription>
     {
         public CategoryWithDescriptionMap()
         {
-            SubclassFieldId(1);
-            Map(c => c.Description, 1);
+            this.DynamicSubclassMap<CategoryWithDescriptionMap, CategoryWithDescription>(1);
+
+//            SubclassFieldId(1);
+//            Map(c => c.Description, 1);
         }
     }
 
@@ -76,8 +84,9 @@ namespace FluentProtobufNet.Tests
     {
         public CategoryThirdLevelMap()
         {
-            SubclassFieldId(2);
-            Map(c => c.ThirdLevel, 1);
+            this.DynamicSubclassMap<CategoryThirdLevelMap, CategoryThirdLevel>(2);
+//            SubclassFieldId(2);
+//            Map(c => c.ThirdLevel, 1);
         }
     }
 
@@ -85,8 +94,8 @@ namespace FluentProtobufNet.Tests
     {
         public ItemMap()
         {
-            Map(m => m.SKU, 1);
-
+            this.DynamicClassMap<ItemMap, Item>();
+//            Map(m => m.SKU, 1);
         }
     }
 
