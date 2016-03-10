@@ -1,4 +1,4 @@
-public class $MessageType$Map : ClassMap<T><$MessageType$>
+public class $MessageType$Map : ClassMap<$MessageType$>
 {
     public $MessageType$Map()
     {
