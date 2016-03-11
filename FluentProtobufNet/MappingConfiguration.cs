@@ -1,13 +1,16 @@
 
+using ProtoBuf.Meta;
+
 namespace FluentProtobufNet
 {
     public class MappingConfiguration
     {
         readonly PersistenceModel _model;
 
-        public MappingConfiguration(IDiagnosticLogger logger)
+        public MappingConfiguration(RuntimeTypeModel runtimeTypeModel)
         {
-            _model = new PersistenceModel();
+            _model = new PersistenceModel(runtimeTypeModel ?? TypeModel.Create());
+
             FluentMappings = new FluentMappingsContainer();
         }
 

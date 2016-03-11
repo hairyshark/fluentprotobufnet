@@ -11,9 +11,15 @@ namespace FluentProtobufNet
     public class PersistenceModel
     {
         protected readonly IList<IMappingProvider> ClassProviders = new List<IMappingProvider>();
-        protected IDiagnosticLogger Log = new NullDiagnosticsLogger();
-        private RuntimeTypeModel _protobufModel;
+        private readonly RuntimeTypeModel _protobufModel;
         private readonly IList<IMappingProvider> _subclassProviders = new List<IMappingProvider>();
+
+        protected IDiagnosticLogger Log = new NullDiagnosticsLogger();
+
+        public PersistenceModel(RuntimeTypeModel protobufModel)
+        {
+            _protobufModel = protobufModel;
+        }
 
         public void AddMappingsFromAssembly(Assembly assembly)
         {
@@ -69,7 +75,6 @@ namespace FluentProtobufNet
 
         public virtual void Configure(Configuration cfg)
         {
-            _protobufModel = TypeModel.Create();
             foreach (var classMap in ClassProviders)
                 classMap.GetRuntimeTypeModel(_protobufModel);
 

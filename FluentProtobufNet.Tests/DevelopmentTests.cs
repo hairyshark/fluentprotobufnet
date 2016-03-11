@@ -13,7 +13,9 @@ namespace FluentProtobufNet.Tests
         [SetUp]
         public void Setup()
         {
-            _config = Fluently.Configure()
+            var runtimeTypeModel = TypeModel.Create();
+
+            _config = Fluently.ConfigureWith(runtimeTypeModel)
                 .Mappings(m =>
                     m.FluentMappings.AddFromAssemblyOf<CategoryMap>())
                 .BuildConfiguration();

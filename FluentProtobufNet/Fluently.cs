@@ -1,3 +1,5 @@
+using ProtoBuf.Meta;
+
 namespace FluentProtobufNet
 {
     public class Fluently
@@ -6,5 +8,11 @@ namespace FluentProtobufNet
         {
             return new FluentConfiguration();
         }
+
+        public static FluentConfiguration ConfigureWith(RuntimeTypeModel runtimeTypeModel)
+        {
+            return new FluentConfiguration(runtimeTypeModel);
+        }
+
     }
 }
