@@ -1,6 +1,9 @@
-﻿using FluentProtobufNet.Mapping;
+﻿using System;
+using System.Dynamic;
+using FluentProtobufNet.Mapping;
 using NUnit.Framework;
 using System.Linq;
+using System.Reflection;
 using ProtoBuf.Meta;
 
 namespace FluentProtobufNet.Tests
@@ -53,32 +56,29 @@ namespace FluentProtobufNet.Tests
         }
     }
 
+    public static class Indexor
+    {
+        private static int seed = 1;
+
+        public static int GetIndex(this PropertyInfo propertyInfo)
+        {
+            return seed++;
+        }
+    }
+
     public class CategoryMap : ClassMap<Category>
     {
         public CategoryMap()
         {
-            this.DynamicClassMap<CategoryMap, Category>();
-
-//            Map(m => m.Name, 1);
-//            Map(m => m.SubCategories, 2);
-//            Map(m => m.Items, 3);
-//            References(m => m.ParentCategory, 4);
+            this.DynamicClassMap<CategoryMap, Category>(Indexor.GetIndex);
         }
-    }
-
-    public interface IDynamicMapper
-    {
-        void Map();
     }
 
     public class CategoryWithDescriptionMap : SubclassMap<CategoryWithDescription>
     {
         public CategoryWithDescriptionMap()
         {
-            this.DynamicSubclassMap<CategoryWithDescriptionMap, CategoryWithDescription>(1);
-
-//            SubclassFieldId(1);
-//            Map(c => c.Description, 1);
+            this.DynamicSubclassMap<CategoryWithDescriptionMap, CategoryWithDescription>(1, Indexor.GetIndex);
         }
     }
 
@@ -86,9 +86,7 @@ namespace FluentProtobufNet.Tests
     {
         public CategoryThirdLevelMap()
         {
-            this.DynamicSubclassMap<CategoryThirdLevelMap, CategoryThirdLevel>(2);
-//            SubclassFieldId(2);
-//            Map(c => c.ThirdLevel, 1);
+            this.DynamicSubclassMap<CategoryThirdLevelMap, CategoryThirdLevel>(2, Indexor.GetIndex);
         }
     }
 
@@ -96,8 +94,7 @@ namespace FluentProtobufNet.Tests
     {
         public ItemMap()
         {
-            this.DynamicClassMap<ItemMap, Item>();
-//            Map(m => m.SKU, 1);
+            this.DynamicClassMap<ItemMap, Item>(Indexor.GetIndex);
         }
     }
 
