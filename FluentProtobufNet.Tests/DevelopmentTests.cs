@@ -1,9 +1,8 @@
-﻿using System;
-using System.Dynamic;
-using FluentProtobufNet.Mapping;
+﻿using FluentProtobufNet.Mapping;
 using NUnit.Framework;
 using System.Linq;
 using System.Reflection;
+using FluentProtobufNet.Helpers;
 using ProtoBuf.Meta;
 
 namespace FluentProtobufNet.Tests
@@ -58,7 +57,7 @@ namespace FluentProtobufNet.Tests
 
     public static class Indexor
     {
-        private static int seed = 1;
+        private static volatile int seed = 1;
 
         public static int GetIndex(this PropertyInfo propertyInfo)
         {

@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using FluentProtobufNet.Mapping;
 
-namespace FluentProtobufNet.Tests
+namespace FluentProtobufNet.Helpers
 {
     public static class DynamicTypeMapper
     {
