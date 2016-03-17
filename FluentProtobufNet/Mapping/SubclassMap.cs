@@ -29,10 +29,12 @@ namespace FluentProtobufNet.Mapping
                 types.SingleOrDefault(t => t.Type == typeof(T).BaseType);
 
             if (baseType.GetSubtypes().Any(s => s.FieldNumber == _subclassFieldId))
-                throw new FieldIdAlreadyUsedException(_subclassFieldId,
+            {
+                throw new FieldIdAlreadyUsedException(this._subclassFieldId,
                     baseType.GetSubtypes().First(s => s.FieldNumber == _subclassFieldId).DerivedType);
+            }
 
-            baseType.AddSubType(_subclassFieldId, typeof (T));
+            baseType.AddSubType(this._subclassFieldId, typeof (T));
 
             return protobufModel;
         }

@@ -1,27 +1,29 @@
-
-using ProtoBuf.Meta;
-
 namespace FluentProtobufNet
 {
+    using System;
+
+    using ProtoBuf.Meta;
+
     public class MappingConfiguration
     {
         readonly PersistenceModel _model;
 
-        public MappingConfiguration(RuntimeTypeModel runtimeTypeModel)
-        {
-            _model = new PersistenceModel(runtimeTypeModel ?? TypeModel.Create());
+        private readonly Func<object, int> indexor;
 
-            FluentMappings = new FluentMappingsContainer();
+        public MappingConfiguration(RuntimeTypeModel runtimeTypeModel, Func<object, int> indexor)
+        {
+            this._model = new PersistenceModel(runtimeTypeModel ?? TypeModel.Create(), indexor);
+
+            this.FluentMappings = new FluentMappingsContainer();
         }
 
         public FluentMappingsContainer FluentMappings { get; set; }
 
         public void Apply(Configuration cfg)
         {
-            FluentMappings.Apply(_model);
+            this.FluentMappings.Apply(this._model);
 
-            _model.Configure(cfg);
-
+            this._model.Configure(cfg);
         }
     }
 }

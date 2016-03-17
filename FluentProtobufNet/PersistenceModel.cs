@@ -1,69 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using FluentProtobufNet.Helpers;
-using FluentProtobufNet.Mapping;
-using ProtoBuf.Meta;
-
-namespace FluentProtobufNet
+﻿namespace FluentProtobufNet
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
+    using FluentProtobufNet.Helpers;
+    using FluentProtobufNet.Mapping;
+
+    using ProtoBuf.Meta;
+
     public class PersistenceModel
     {
         protected readonly IList<IMappingProvider> ClassProviders = new List<IMappingProvider>();
-        private readonly RuntimeTypeModel _protobufModel;
-        private readonly IList<IMappingProvider> _subclassProviders = new List<IMappingProvider>();
 
         protected IDiagnosticLogger Log = new NullDiagnosticsLogger();
 
-        public PersistenceModel(RuntimeTypeModel protobufModel)
-        {
-            _protobufModel = protobufModel;
-        }
+        private readonly RuntimeTypeModel _protobufModel;
 
-        public void AddMappingsFromAssembly(Assembly assembly)
-        {
-            AddMappingsFromSource(new AssemblyTypeSource(assembly));
-        }
+        private readonly Func<object, int> indexor;
 
-        public void AddMappingsFromSource(ITypeSource source)
-        {
-            source.GetTypes()
-                .Where(IsMappingOf<IMappingProvider>)
-                .Each(Add);
+        private readonly IList<IMappingProvider> _subclassProviders = new List<IMappingProvider>();
 
-            Log.LoadedFluentMappingsFromSource(source);
-        }
-
-        private static bool IsMappingOf<T>(Type type)
+        public PersistenceModel(RuntimeTypeModel protobufModel, Func<object, int> indexor)
         {
-            return !type.IsGenericType && typeof(T).IsAssignableFrom(type);
+            this._protobufModel = protobufModel;
+            this.indexor = indexor;
         }
 
         public void Add(IMappingProvider provider)
         {
-            ClassProviders.Add(provider);
-        }
-
-        public void AddSubclassMap(IMappingProvider provider)
-        {
-            _subclassProviders.Add(provider);
+            this.ClassProviders.Add(provider);
         }
 
         public void Add(Type type)
         {
-            var mapping = type.InstantiateUsingParameterlessConstructor();
+            var mapping = type.Instantiate(this.indexor);
 
             if (mapping is IMappingProvider)
             {
                 if (mapping.GetType().BaseType != null && mapping.GetType().BaseType.IsGenericType)
                 {
-                    if (mapping.GetType().BaseType.GetGenericTypeDefinition() == typeof (ClassMap<>))
+                    if (mapping.GetType().BaseType.GetGenericTypeDefinition() == typeof(ClassMap<>))
                     {
                         Log.FluentMappingDiscovered(type);
                         Add((IMappingProvider)mapping);
                     }
-                    else if (mapping.GetType().BaseType.GetGenericTypeDefinition() == typeof (SubclassMap<>))
+                    else if (mapping.GetType().BaseType.GetGenericTypeDefinition() == typeof(SubclassMap<>))
                     {
                         AddSubclassMap((IMappingProvider)mapping);
                     }
@@ -73,23 +56,51 @@ namespace FluentProtobufNet
                 throw new InvalidOperationException("Unsupported mapping type '" + type.FullName + "'");
         }
 
+        public void AddMappingsFromAssembly(Assembly assembly)
+        {
+            this.AddMappingsFromSource(new AssemblyTypeSource(assembly));
+        }
+
+        public void AddMappingsFromSource(ITypeSource source)
+        {
+            source.GetTypes().Where(IsMappingOf<IMappingProvider>).Each(this.Add);
+
+            this.Log.LoadedFluentMappingsFromSource(source);
+        }
+
+        public void AddSubclassMap(IMappingProvider provider)
+        {
+            this._subclassProviders.Add(provider);
+        }
+
         public virtual void Configure(Configuration cfg)
         {
-            foreach (var classMap in ClassProviders)
-                classMap.GetRuntimeTypeModel(_protobufModel);
-
-            var subclassProvidersCopy = _subclassProviders.ToList();
-            IMappingProvider subclassMap;
-            while ((subclassMap = subclassProvidersCopy.FirstOrDefault(sc => sc.CanBeResolvedUsing(_protobufModel))) != null)
+            foreach (var classMap in this.ClassProviders)
             {
-                subclassMap.GetRuntimeTypeModel(_protobufModel);
+                classMap.GetRuntimeTypeModel(this._protobufModel);
+            }
+
+            var subclassProvidersCopy = this._subclassProviders.ToList();
+            IMappingProvider subclassMap;
+            while (
+                (subclassMap = subclassProvidersCopy.FirstOrDefault(sc => sc.CanBeResolvedUsing(this._protobufModel)))
+                != null)
+            {
+                subclassMap.GetRuntimeTypeModel(this._protobufModel);
                 subclassProvidersCopy.Remove(subclassMap);
             }
 
-            if(subclassProvidersCopy.Any())
-                throw new Exception("Couldn't resolve all subclassed");
+            if (subclassProvidersCopy.Any())
+            {
+                throw new Exception("Couldn't resolve all subclasses");
+            }
 
-            cfg.RuntimeTypeModel = _protobufModel;
+            cfg.RuntimeTypeModel = this._protobufModel;
+        }
+
+        private static bool IsMappingOf<T>(Type type)
+        {
+            return !type.IsGenericType && typeof(T).IsAssignableFrom(type);
         }
     }
 }

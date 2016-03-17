@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentProtobufNet.Exceptions;
-
-namespace FluentProtobufNet.Helpers
+﻿namespace FluentProtobufNet.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
+    using Exceptions;
+
     public static class Extensions
     {
         public static void Each<T>(this IEnumerable<T> source, Action<T> action)
@@ -12,19 +15,23 @@ namespace FluentProtobufNet.Helpers
                 action(item);
         }
 
-        public static T InstantiateUsingParameterlessConstructor<T>(this Type type)
+        public static object Instantiate(this Type type, Func<object, int> indexor)
         {
-            return (T)type.InstantiateUsingParameterlessConstructor();
+            var constructor = ReflectHelper.GetClassMapConstructor(type);
+            var constructor2 = ReflectHelper.GetSubclassMapConstructor(type);
+
+            if (constructor == null && constructor2 == null)
+            {
+                throw new MissingConstructorException(type);
+            }
+
+            return constructor != null ? constructor.Invoke(null) : constructor2.Invoke(new object[] { indexor(type) });
         }
 
-        public static object InstantiateUsingParameterlessConstructor(this Type type)
+        public static bool HasAttribute<TAttribute>(this PropertyInfo arg)
+            where TAttribute : Attribute
         {
-            var constructor = ReflectHelper.GetDefaultConstructor(type);
-
-            if (constructor == null)
-                throw new MissingConstructorException(type);
-
-            return constructor.Invoke(null);
+            return arg.GetCustomAttributes<TAttribute>(false).FirstOrDefault() != null;
         }
     }
 }

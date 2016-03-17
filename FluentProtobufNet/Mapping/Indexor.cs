@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace FluentProtobufNet.Tests
+﻿namespace FluentProtobufNet.Tests
 {
     public static class Indexor
     {

@@ -13,17 +13,17 @@ namespace FluentProtobufNet.Tests
 
     public class CategoryWithDescriptionMap : SubclassMap<CategoryWithDescription>
     {
-        public CategoryWithDescriptionMap()
+        public CategoryWithDescriptionMap(int discriminator)
         {
-            this.DynamicSubclassMap<CategoryWithDescriptionMap, CategoryWithDescription>(1, Indexor.GetIndex);
+            this.DynamicSubclassMap<CategoryWithDescriptionMap, CategoryWithDescription>(discriminator, Indexor.GetIndex);
         }
     }
 
     public class CategoryThirdLevelMap : SubclassMap<CategoryThirdLevel>
     {
-        public CategoryThirdLevelMap()
+        public CategoryThirdLevelMap(int discriminator)
         {
-            this.DynamicSubclassMap<CategoryThirdLevelMap, CategoryThirdLevel>(2, Indexor.GetIndex);
+            this.DynamicSubclassMap<CategoryThirdLevelMap, CategoryThirdLevel>(discriminator, Indexor.GetIndex);
         }
     }
 

@@ -6,29 +6,38 @@ using FluentProtobufNet.Mapping;
 
 namespace FluentProtobufNet.Helpers
 {
+    using System.Collections.Generic;
+
     public static class DynamicTypeMapper
     {
-        public static void DynamicSubclassMap<TMapper, TMessage>(this TMapper mapper, int subclassField, Func<PropertyInfo, int> indexor) where TMapper : SubclassMap<TMessage>
+        public static void DynamicSubclassMap<TMapper, TMessage>(this TMapper mapper, int subclassField, Func<PropertyInfo, int> indexor, Func<PropertyInfo, bool> selector = null) where TMapper : SubclassMap<TMessage>
         {
             mapper.SubclassFieldId(subclassField);
 
-            DynamicClassMap<TMapper, TMessage>(mapper, indexor);
+            DynamicClassMap<TMapper, TMessage>(mapper, indexor, selector);
         }
 
-        public static void DynamicClassMap<TMapper, TMessage>(this TMapper mapper, Func<PropertyInfo, int> indexor) where TMapper : ClassMap<TMessage>
+        public static void DynamicClassMap<TMapper, TMessage>(this TMapper mapper, Func<PropertyInfo, int> indexor, Func<PropertyInfo, bool> selector = null) where TMapper : ClassMap<TMessage>
         {
             // find every public invokable instance targetMember
             const BindingFlags flags = BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance;
 
-            foreach (var result in typeof(TMessage).GetProperties(flags).Select(p => Build<TMessage>(p, indexor)))
+            IEnumerable<PropertyInfo> propertyInfos = typeof(TMessage).GetProperties(flags);
+
+            if (selector != null)
             {
-                if (result.Item2)
+                propertyInfos = propertyInfos.Where(selector);
+            }
+
+            foreach (var buildResult in propertyInfos.Select(p => Build<TMessage>(p, indexor)))
+            {
+                if (buildResult.Item2)
                 {
-                    mapper.References(result.Item1, result.Item3);
+                    mapper.References(buildResult.Item1, buildResult.Item3);
                 }
                 else
                 {
-                    mapper.Map(result.Item1, result.Item3);
+                    mapper.Map(buildResult.Item1, buildResult.Item3);
                 }
             }
         }

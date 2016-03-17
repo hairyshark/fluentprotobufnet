@@ -7,6 +7,7 @@ using ProtoBuf.Meta;
 
 namespace FluentProtobufNet.Mapping
 {
+    using System.Reflection;
 
     public class ClassMap<T> : IMappingProvider
     {
@@ -84,6 +85,11 @@ namespace FluentProtobufNet.Mapping
         }
 
         public virtual bool CanBeResolvedUsing(RuntimeTypeModel protobufModel)
+        {
+            return true;
+        }
+
+        protected bool AllPublic(PropertyInfo arg)
         {
             return true;
         }

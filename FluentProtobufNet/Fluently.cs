@@ -8,11 +8,5 @@ namespace FluentProtobufNet
         {
             return new FluentConfiguration();
         }
-
-        public static FluentConfiguration ConfigureWith(RuntimeTypeModel runtimeTypeModel)
-        {
-            return new FluentConfiguration(runtimeTypeModel);
-        }
-
     }
 }
