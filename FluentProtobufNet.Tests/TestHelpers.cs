@@ -1,4 +1,6 @@
-﻿namespace FluentProtobufNet.Tests
+﻿using FluentProtobufNet.Helpers;
+
+namespace FluentProtobufNet.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -89,5 +91,11 @@
 
             Console.WriteLine();
         }
+
+        public static void PrintSchemas(this IEnumerable<MetaType> types, Configuration config)
+        {
+            types.Each(t => Console.WriteLine(config.RuntimeTypeModel.GetSchema(t.Type)));
+        }
+
     }
 }

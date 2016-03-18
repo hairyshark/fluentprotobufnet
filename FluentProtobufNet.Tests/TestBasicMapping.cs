@@ -1,4 +1,5 @@
-﻿using FluentProtobufNet.Tests.Basic;
+﻿using System.Collections.Generic;
+using FluentProtobufNet.Tests.Basic;
 
 namespace FluentProtobufNet.Tests
 {
@@ -25,19 +26,23 @@ namespace FluentProtobufNet.Tests
         }
 
         private Configuration _config;
+        private IEnumerable<MetaType> _modelTypes;
 
         [Test]
         public void CanBuildConfiguration()
         {
             Assert.IsNotNull(this._config.RuntimeTypeModel);
             Assert.Greater(this._config.RuntimeTypeModel.GetTypes().Cast<object>().Count(), 0);
+
+            this.ShowResults();
         }
 
         [Test]
         public void CorrectlyMapsSingleLevelSubclasses()
         {
-            var types = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
-            var category = types.SingleOrDefault(t => t.Type == typeof(Category));
+            this.ShowResults();
+
+            var category = this._modelTypes.SingleOrDefault(t => t.Type == typeof(Category));
 
             Assert.IsNotNull(category);
             Assert.IsTrue(category.HasSubtypes);
@@ -47,12 +52,20 @@ namespace FluentProtobufNet.Tests
         [Test]
         public void CorrectlyMapsUpToThirdLevelSubclass()
         {
-            var types = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
-            var categoryWithDescription = types.SingleOrDefault(t => t.Type == typeof(CategoryWithDescription));
+            this.ShowResults();
+
+            var categoryWithDescription = this._modelTypes.SingleOrDefault(t => t.Type == typeof(CategoryWithDescription));
 
             Assert.IsNotNull(categoryWithDescription);
             Assert.IsTrue(categoryWithDescription.HasSubtypes);
             Assert.IsTrue(categoryWithDescription.GetSubtypes()[0].DerivedType.Type == typeof(CategoryThirdLevel));
+        }
+
+        private void ShowResults()
+        {
+            this._modelTypes = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
+
+            this._modelTypes.PrintSchemas(this._config);
         }
     }
 }

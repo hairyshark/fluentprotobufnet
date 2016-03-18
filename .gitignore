@@ -43,7 +43,6 @@ build/
 *.vssscc
 .builds
 *.pidb
-*.log
 *.scc
 
 # Visual C++ cache files
@@ -149,3 +148,4 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+*.sln.DotSettings

@@ -44,6 +44,7 @@
     <Compile Include="ISpecification.cs" />
     <Compile Include="Mapping\IMapBaseClasses.cs" />
     <Compile Include="Mapping\IMapSubClasses.cs" />
+    <Compile Include="Mapping\WcfClassMap.cs" />
     <Compile Include="NameSpaceSpecification.cs" />
     <Compile Include="WcfAssemblyTypeSource.cs" />
     <Compile Include="AssemblyTypeSource.cs" />
@@ -52,7 +53,7 @@
     <Compile Include="Helpers\DynamicTypeMapper.cs" />
     <Compile Include="IDiagnosticLogger.cs" />
     <Compile Include="ITypeSource.cs" />
-    <Compile Include="Mapping\GenericMaps.cs" />
+    <Compile Include="Mapping\WcfSubClassMap.cs" />
     <Compile Include="Mapping\IMappingProvider.cs" />
     <Compile Include="Mapping\ClassMap.cs" />
     <Compile Include="Configuration.cs" />

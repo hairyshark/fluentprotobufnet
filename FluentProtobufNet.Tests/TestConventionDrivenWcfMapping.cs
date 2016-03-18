@@ -34,7 +34,7 @@ namespace FluentProtobufNet.Tests
         public void TestCorrectlyMapsSingleLevelSubTypes()
         {
             var types = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
-            var vanilla = types.SingleOrDefault(t => t.Type == typeof (TradeVanilla));
+            var vanilla = types.SingleOrDefault(t => t.Type == typeof(TradeVanilla));
 
             Assert.IsNotNull(vanilla);
             Assert.IsTrue(vanilla.HasSubtypes);
@@ -42,9 +42,9 @@ namespace FluentProtobufNet.Tests
 
             Assert.AreEqual(subTypes.Length, 3);
 
-            Assert.IsTrue(subTypes[0].DerivedType.Type == typeof (IRSwapVanilla));
-            Assert.IsTrue(subTypes[1].DerivedType.Type == typeof (SubclassVanilla1));
-            Assert.IsTrue(subTypes[2].DerivedType.Type == typeof (SubclassVanilla2));
+            Assert.IsTrue(subTypes[0].DerivedType.Type == typeof(IRSwapVanilla));
+            Assert.IsTrue(subTypes[1].DerivedType.Type == typeof(SubclassVanilla1));
+            Assert.IsTrue(subTypes[2].DerivedType.Type == typeof(SubclassVanilla2));
         }
 
         [Test]
