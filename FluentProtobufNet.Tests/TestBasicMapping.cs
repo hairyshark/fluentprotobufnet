@@ -18,7 +18,7 @@
                 Fluently.Configure()
                     .WithModel(runtimeTypeModel)
                     .WithIndexor(Indexor.GetIndex)
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<CategoryMap>())
+                    .Mappings(m => m.FluentMappings.AddFromAssemblySource<CategoryMap, AssemblyTypeSource>())
                     .BuildConfiguration();
         }
 

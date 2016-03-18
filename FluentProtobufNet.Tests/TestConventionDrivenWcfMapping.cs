@@ -20,11 +20,7 @@ namespace FluentProtobufNet.Tests
                     .Mappings(
                         m =>
                         {
-                            m.FluentMappings.AddWcfMapFor(typeof(ExecutionVanilla));
-                            m.FluentMappings.AddWcfMapFor(typeof(TradeVanilla));
-                            m.FluentMappings.AddWcfMapFor(typeof(IRSwapVanilla));
-                            m.FluentMappings.AddWcfMapFor(typeof(SubclassVanilla1));
-                            m.FluentMappings.AddWcfMapFor(typeof(SubclassVanilla2));
+                            m.FluentMappings.AddFromAssemblySource<ExecutionVanilla, WcfAssemblyTypeSource>();
                         })
                     .BuildConfiguration();
         }

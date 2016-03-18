@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using FluentProtobufNet.Helpers;
-using FluentProtobufNet.Mapping;
 
 namespace FluentProtobufNet
 {
     public class FluentMappingsContainer
     {
-        private readonly IList<Assembly> _assemblies = new List<Assembly>();
+        private readonly IList<Tuple<Assembly, Type>> _assemblySources = new List<Tuple<Assembly, Type>>();
+
         private readonly List<Type> _types = new List<Type>();
 
         public bool WasUsed { get; set; }
@@ -17,20 +16,24 @@ namespace FluentProtobufNet
         ///     Add all fluent mappings in the assembly that contains T.
         /// </summary>
         /// <typeparam name="T">Type from the assembly</typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <returns>Fluent mappings configuration</returns>
-        public FluentMappingsContainer AddFromAssemblyOf<T>()
+        public FluentMappingsContainer AddFromAssemblySource<T, TSource>()
+            where T : class
+            where TSource : ITypeSource
         {
-            return this.AddFromAssembly(typeof (T).Assembly);
+            return this.AddFromAssemblySource(typeof (T).Assembly, typeof(TSource));
         }
 
         /// <summary>
         ///     Add all fluent mappings in the assembly
         /// </summary>
         /// <param name="assembly">Assembly to add mappings from</param>
+        /// <param name="typeSource"></param>
         /// <returns>Fluent mappings configuration</returns>
-        public FluentMappingsContainer AddFromAssembly(Assembly assembly)
+        private FluentMappingsContainer AddFromAssemblySource(Assembly assembly, Type typeSource)
         {
-            this._assemblies.Add(assembly);
+            this._assemblySources.Add(new Tuple<Assembly, Type>(assembly, typeSource));
             this.WasUsed = true;
             return this;
         }
@@ -63,37 +66,15 @@ namespace FluentProtobufNet
 
         internal void Apply(PersistenceModel model)
         {
-            foreach (var assembly in this._assemblies)
+            foreach (var tuple in this._assemblySources)
             {
-                model.AddMappingsFromAssembly(assembly);
+                model.AddMappingsFromAssemblySource(tuple);
             }
 
             foreach (var type in this._types)
             {
                 model.Add(type);
             }
-        }
-
-        public FluentMappingsContainer AddWcfMapFor(Type mapType)
-        {
-            var baseType = mapType.BaseType;
-
-            if (baseType.IsDataContract())
-            {
-                Console.WriteLine("adding WcfSubClassMap for {0}", mapType);
-
-                this._types.Add(typeof(WcfSubClassMap<>).MakeGenericType(mapType));
-            }
-            else
-            {
-                Console.WriteLine("adding WcfClassMap for {0}", mapType);
-
-                this._types.Add(typeof(WcfClassMap<>).MakeGenericType(mapType));
-            }         
-
-            this.WasUsed = true;
-
-            return this;
         }
     }
 }

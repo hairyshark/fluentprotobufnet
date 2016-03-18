@@ -41,11 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WcfAssemblyTypeSource.cs" />
     <Compile Include="AssemblyTypeSource.cs" />
     <Compile Include="Exceptions\InstantiationException.cs" />
     <Compile Include="Exceptions\FieldIdAlreadyUsedException.cs" />
     <Compile Include="Helpers\DynamicTypeMapper.cs" />
     <Compile Include="IDiagnosticLogger.cs" />
+    <Compile Include="ITypeSource.cs" />
     <Compile Include="Mapping\GenericMaps.cs" />
     <Compile Include="Mapping\IMappingProvider.cs" />
     <Compile Include="Mapping\ClassMap.cs" />

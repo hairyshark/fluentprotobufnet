@@ -7,20 +7,25 @@ namespace FluentProtobufNet
 {
     public class AssemblyTypeSource : ITypeSource
     {
-        readonly Assembly _source;
+        protected readonly Assembly Source;
 
         public AssemblyTypeSource(Assembly source)
         {
             if (source == null) throw new ArgumentNullException("source");
 
-            _source = source;
+            this.Source = source;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Source.GetHashCode();
         }
 
         #region ITypeSource Members
 
-        public IEnumerable<Type> GetTypes()
+        public virtual IEnumerable<Type> GetTypes()
         {
-            return _source.GetTypes().OrderBy(x => x.FullName);
+            return this.Source.GetTypes().OrderBy(x => x.FullName);
         }
 
         public void LogSource(IDiagnosticLogger logger)
@@ -32,21 +37,9 @@ namespace FluentProtobufNet
 
         public string GetIdentifier()
         {
-            return _source.GetName().FullName;
+            return this.Source.GetName().FullName;
         }
 
         #endregion
-
-        public override int GetHashCode()
-        {
-            return _source.GetHashCode();
-        }
-    }
-
-    public interface ITypeSource
-    {
-        IEnumerable<Type> GetTypes();
-        //void LogSource(IDiagnosticLogger logger);
-        string GetIdentifier();
     }
 }

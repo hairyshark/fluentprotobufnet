@@ -1,31 +1,28 @@
-﻿namespace FluentProtobufNet
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using FluentProtobufNet.Helpers;
+using FluentProtobufNet.Mapping;
+using ProtoBuf.Meta;
+
+namespace FluentProtobufNet
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
-    using FluentProtobufNet.Helpers;
-    using FluentProtobufNet.Mapping;
-
-    using ProtoBuf.Meta;
-
     public class PersistenceModel
     {
-        protected readonly IList<IMappingProvider> ClassProviders = new List<IMappingProvider>();
-
-        protected IDiagnosticLogger Log = new NullDiagnosticsLogger();
-
         private readonly RuntimeTypeModel _protobufModel;
 
-        private readonly Func<object, int> indexor;
-
         private readonly IList<IMappingProvider> _subclassProviders = new List<IMappingProvider>();
+        protected readonly IList<IMappingProvider> ClassProviders = new List<IMappingProvider>();
+
+        private readonly Func<object, int> _indexor;
+
+        protected IDiagnosticLogger Log = new NullDiagnosticsLogger();
 
         public PersistenceModel(RuntimeTypeModel protobufModel, Func<object, int> indexor)
         {
             this._protobufModel = protobufModel;
-            this.indexor = indexor;
+            this._indexor = indexor;
         }
 
         public void Add(IMappingProvider provider)
@@ -35,20 +32,23 @@
 
         public void Add(Type type)
         {
-            var mapping = type.Instantiate(this.indexor);
+            var mapping = type.Instantiate(this._indexor);
 
-            if (mapping is IMappingProvider)
+            var provider = mapping as IMappingProvider;
+            if (provider != null)
             {
-                if (mapping.GetType().BaseType != null && mapping.GetType().BaseType.IsGenericType)
+                var baseType = provider.GetType().BaseType;
+
+                if (baseType != null && baseType.IsGenericType)
                 {
-                    if (mapping.GetType().BaseType.GetGenericTypeDefinition() == typeof(ClassMap<>))
+                    if (baseType.GetGenericTypeDefinition() == typeof (ClassMap<>))
                     {
-                        Log.FluentMappingDiscovered(type);
-                        Add((IMappingProvider)mapping);
+                        this.Log.FluentMappingDiscovered(type);
+                        this.Add(provider);
                     }
-                    else if (mapping.GetType().BaseType.GetGenericTypeDefinition() == typeof(SubclassMap<>))
+                    else if (baseType.GetGenericTypeDefinition() == typeof (SubclassMap<>))
                     {
-                        AddSubclassMap((IMappingProvider)mapping);
+                        this.AddSubclassMap(provider);
                     }
                 }
             }
@@ -56,9 +56,18 @@
                 throw new InvalidOperationException("Unsupported mapping type '" + type.FullName + "'");
         }
 
-        public void AddMappingsFromAssembly(Assembly assembly)
+        public void AddMappingsFromAssemblySource(Tuple<Assembly, Type> tuple)
         {
-            this.AddMappingsFromSource(new AssemblyTypeSource(assembly));
+            var constructorInfo = tuple.Item2.GetConstructor(new[] { typeof(Assembly) });
+
+            if (constructorInfo == null)
+            {
+                throw new InvalidOperationException("missing constructor public " + tuple.Item2.Name + "(Assembly assembly) on type " + tuple.Item2);
+            }
+
+            var typeSourceInstance = constructorInfo.Invoke(new object[] {tuple.Item1});
+
+            this.AddMappingsFromSource((ITypeSource)typeSourceInstance);
         }
 
         public void AddMappingsFromSource(ITypeSource source)
@@ -100,7 +109,7 @@
 
         private static bool IsMappingOf<T>(Type type)
         {
-            return !type.IsGenericType && typeof(T).IsAssignableFrom(type);
+            return typeof (T).IsAssignableFrom(type);
         }
     }
 }
