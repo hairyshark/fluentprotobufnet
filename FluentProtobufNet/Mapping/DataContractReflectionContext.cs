@@ -14,20 +14,16 @@ namespace FluentProtobufNet.Mapping
         protected override IEnumerable<object> GetCustomAttributes(MemberInfo member,
                                                                    IEnumerable<object> declaredAttributes)
         {
-            var dc = FirstOrDefault<DataContractAttribute>(member);
-            var dm = FirstOrDefault<DataMemberAttribute>(member);
-            var kt = FirstOrDefault<KnownTypeAttribute>(member);
-
             var result = new List<object>();
 
-            if (dc != null)
+            if (FirstOrDefault<DataContractAttribute>(member) != null)
             {
                 result.Add(new ProtoContractAttribute { InferTagFromName = true });
             }
 
-            if (kt != null)
+            if (FirstOrDefault<KnownTypeAttribute>(member) != null)
             {
-                result.Add(new ProtoIncludeAttribute(member.GetIndex(), kt.Type));
+                result.Add(new ProtoIncludeAttribute(member.GetIndex(), FirstOrDefault<KnownTypeAttribute>(member).Type));
             }
 
             if (result.Any())
@@ -35,7 +31,7 @@ namespace FluentProtobufNet.Mapping
                 return result;
             }
 
-            if (dm == null)
+            if (FirstOrDefault<DataMemberAttribute>(member) == null)
             {
                 return base.GetCustomAttributes(member, declaredAttributes);
             }
