@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Tests.Proto;
 using FluentProtobufNet.Tests.WCF;
 using NUnit.Framework;
 using ProtoBuf;
