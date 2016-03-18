@@ -37,8 +37,7 @@ namespace FluentProtobufNet.Tests
         [Test]
         public void TestCorrectlyMapsSingleLevelSubTypes()
         {
-            var types = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
-            var vanilla = types.SingleOrDefault(t => t.Type == typeof(TradeVanilla));
+            var vanilla = this._modelTypes.SingleOrDefault(t => t.Type == typeof(TradeVanilla));
 
             Assert.IsNotNull(vanilla);
             Assert.IsTrue(vanilla.HasSubtypes);
@@ -51,7 +50,7 @@ namespace FluentProtobufNet.Tests
             Assert.IsTrue(subTypes[2].DerivedType.Type == typeof(SubclassVanilla2));
         }
 
-        [Test]
+        [Test(Description = "THIS TICKS ALL THE BOXES FOR DATACONTRACT SERLIAZATION THROUGH PROTOBUF")]
         public void TestWcfVanillaContractsPassRoundTrip()
         {
             var testDate = new DateTime(1999, 12, 31);
