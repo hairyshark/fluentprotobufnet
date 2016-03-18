@@ -1,60 +1,58 @@
-﻿namespace FluentProtobufNet.Tests
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using FluentProtobufNet.Mapping;
+using NUnit.Framework;
+using ProtoBuf;
+using ProtoBuf.Meta;
+
+namespace FluentProtobufNet.Tests
 {
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using System.Runtime.Serialization;
-    using System.Text;
-
-    using FluentProtobufNet.Mapping;
-
-    using NUnit.Framework;
-
-    using ProtoBuf;
-    using ProtoBuf.Meta;
-
-    public static class PropertyHelper
-    {
-        public static string Properties(this object item)
-        {
-            var sb = new StringBuilder();
-
-            foreach (var propertyInfo in item.GetType().GetProperties())
-            {
-                sb.Append(string.Format("{0}={1};", propertyInfo.Name, propertyInfo.GetMethod.Invoke(item, null)));
-            }
-
-            return sb.ToString();
-        }
-    }
-
     [TestFixture]
     public class TestBasicWcfMapping
     {
         [SetUp]
         public void Setup()
         {
-            this.model = TypeModel.Create();
+            this._model = TypeModel.Create();
 
             this._config =
                 Fluently.Configure()
-                    .WithModel(this.model)
+                    .WithModel(this._model)
                     .WithIndexor(Indexor.GetIndex)
                     .Mappings(
                         m =>
-                            {
-                                m.FluentMappings.Add<WcfClassMap<ExecutionVanilla>>();
-                                m.FluentMappings.Add<WcfClassMap<TradeVanilla>>();
-                                m.FluentMappings.Add<WcfSubClassMap<IRSwapVanilla>>();
-                                m.FluentMappings.Add<WcfSubClassMap<SubclassVanilla1>>();
-                                m.FluentMappings.Add<WcfSubClassMap<SubclassVanilla2>>();
-                            })
+                        {
+                            m.FluentMappings.Add<WcfClassMap<ExecutionVanilla>>();
+                            m.FluentMappings.Add<WcfClassMap<TradeVanilla>>();
+                            m.FluentMappings.Add<WcfSubClassMap<IRSwapVanilla>>();
+                            m.FluentMappings.Add<WcfSubClassMap<SubclassVanilla1>>();
+                            m.FluentMappings.Add<WcfSubClassMap<SubclassVanilla2>>();
+                        })
                     .BuildConfiguration();
         }
 
         private Configuration _config;
 
-        private RuntimeTypeModel model;
+        private RuntimeTypeModel _model;
+
+        [Test]
+        public void TestCorrectlyMapsSingleLevelSubTypes()
+        {
+            var types = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
+            var vanilla = types.SingleOrDefault(t => t.Type == typeof (TradeVanilla));
+
+            Assert.IsNotNull(vanilla);
+            Assert.IsTrue(vanilla.HasSubtypes);
+            var subTypes = vanilla.GetSubtypes();
+
+            Assert.AreEqual(subTypes.Length, 3);
+
+            Assert.IsTrue(subTypes[0].DerivedType.Type == typeof (IRSwapVanilla));
+            Assert.IsTrue(subTypes[1].DerivedType.Type == typeof (SubclassVanilla1));
+            Assert.IsTrue(subTypes[2].DerivedType.Type == typeof (SubclassVanilla2));
+        }
 
         [Test]
         public void TestProtoContractsPassRoundTrip()
@@ -62,12 +60,12 @@
             var testDate = new DateTime(1999, 12, 31);
 
             var obj = new ExecutionProto
-                          {
-                              OrderId = 123, 
-                              MyTradeProto = new IRSwapProto { TradeDateTime = testDate, SwapRate = 10 }
-                          };
+            {
+                OrderId = 123,
+                MyTradeProto = new IRSwapProto {TradeDateTime = testDate, SwapRate = 10}
+            };
 
-            var clone = obj.RoundTrip(this.model);
+            var clone = obj.RoundTrip(this._model);
 
             Assert.AreEqual(123, clone.OrderId);
             Assert.AreEqual(testDate, clone.MyTradeProto.TradeDateTime);
@@ -79,21 +77,25 @@
         }
 
         [Test]
+        public void TestVisitWcfVanilla()
+        {
+            typeof (ExecutionVanilla).GetTypeInfo()
+                .Visit<DataContractAttribute, DataMemberAttribute, KnownTypeAttribute>();
+            typeof (TradeVanilla).GetTypeInfo().Visit<DataContractAttribute, DataMemberAttribute, KnownTypeAttribute>();
+            typeof (IRSwapVanilla).GetTypeInfo().Visit<DataContractAttribute, DataMemberAttribute, KnownTypeAttribute>();
+        }
+
+        [Test]
         public void TestVisitWcfVanillaGeneratesProtoContracts()
         {
             var ctx = new DataContractReflectionContext();
 
-            ctx.MapType(typeof(ExecutionVanilla).GetTypeInfo()).Visit<ProtoContractAttribute, ProtoMemberAttribute, ProtoIncludeAttribute>();
-            ctx.MapType(typeof(TradeVanilla).GetTypeInfo()).Visit<ProtoContractAttribute, ProtoMemberAttribute, ProtoIncludeAttribute>();
-            ctx.MapType(typeof(IRSwapVanilla).GetTypeInfo()).Visit<ProtoContractAttribute, ProtoMemberAttribute, ProtoIncludeAttribute>();
-        }
-
-        [Test]
-        public void TestVisitWcfVanilla()
-        {
-            typeof(ExecutionVanilla).GetTypeInfo().Visit<DataContractAttribute, DataMemberAttribute, KnownTypeAttribute>();
-            typeof(TradeVanilla).GetTypeInfo().Visit<DataContractAttribute, DataMemberAttribute, KnownTypeAttribute>();
-            typeof(IRSwapVanilla).GetTypeInfo().Visit<DataContractAttribute, DataMemberAttribute, KnownTypeAttribute>();
+            ctx.MapType(typeof (ExecutionVanilla).GetTypeInfo())
+                .Visit<ProtoContractAttribute, ProtoMemberAttribute, ProtoIncludeAttribute>();
+            ctx.MapType(typeof (TradeVanilla).GetTypeInfo())
+                .Visit<ProtoContractAttribute, ProtoMemberAttribute, ProtoIncludeAttribute>();
+            ctx.MapType(typeof (IRSwapVanilla).GetTypeInfo())
+                .Visit<ProtoContractAttribute, ProtoMemberAttribute, ProtoIncludeAttribute>();
         }
 
         [Test]
@@ -102,13 +104,13 @@
             var testDate = new DateTime(1999, 12, 31);
 
             var obj = new ExecutionVanilla
-                          {
-                              OrderId = 123, 
-                              MyTradeVanilla = new IRSwapVanilla { TradeDateTime = testDate, SwapRate = 10 },
-                              IgnoreMe = "unimportant message"
-                          };
+            {
+                OrderId = 123,
+                MyTradeVanilla = new IRSwapVanilla {TradeDateTime = testDate, SwapRate = 10},
+                IgnoreMe = "unimportant message"
+            };
 
-            var clone = obj.RoundTrip(this.model);
+            var clone = obj.RoundTrip(this._model);
 
             Assert.AreEqual(123, clone.OrderId);
             Assert.AreEqual(testDate, clone.MyTradeVanilla.TradeDateTime);
@@ -118,23 +120,6 @@
             Assert.IsNotNull(swap);
             Assert.AreEqual(10, swap.SwapRate);
             Assert.IsNullOrEmpty(clone.IgnoreMe);
-        }
-
-        [Test]
-        public void TestCorrectlyMapsSingleLevelSubTypes()
-        {
-            var types = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
-            var vanilla = types.SingleOrDefault(t => t.Type == typeof(TradeVanilla));
-
-            Assert.IsNotNull(vanilla);
-            Assert.IsTrue(vanilla.HasSubtypes);
-            var subTypes = vanilla.GetSubtypes();
-
-            Assert.AreEqual(subTypes.Length, 3);
-
-            Assert.IsTrue(subTypes[0].DerivedType.Type == typeof(IRSwapVanilla));           
-            Assert.IsTrue(subTypes[1].DerivedType.Type == typeof(SubclassVanilla1));           
-            Assert.IsTrue(subTypes[2].DerivedType.Type == typeof(SubclassVanilla2));           
         }
     }
 }

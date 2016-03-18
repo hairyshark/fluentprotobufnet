@@ -1,4 +1,6 @@
-﻿namespace FluentProtobufNet.Tests
+﻿using FluentProtobufNet.Mapping;
+
+namespace FluentProtobufNet.Tests
 {
     using System;
     using System.Reflection;
@@ -23,32 +25,40 @@
             this.model.AutoCompile = false;
         }
 
-        [Test(Description = "map from datacontracts into protobuf contracts meet our requirement")]
-        public void RuntimeInheritancePassesVanillaAndReflectionWithNoInferredNames()
+        [Test(Description = "map from datacontracts into protobuf contracts meets our requirement with no inferred names BUT DOESN'T WORK FOR PROTOBUF-NET REASONS")]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Type is not expected, and no contract can be inferred: FluentProtobufNet.Tests.IRSwapVanilla")]
+        public void RuntimeInheritanceFailsVanillaWithCustomReflectionWithNoInferredNames()
         {
             this.model.InferTagFromNameDefault = false;
+            this.model.AutoAddMissingTypes = true;
+            this.model.AutoAddProtoContractTypesOnly = true;
 
             var ctx = new DataContractReflectionContext();
 
             var t0 = ctx.MapType(typeof(TradeVanilla).GetTypeInfo());
             var t1 = ctx.MapType(typeof(IRSwapVanilla).GetTypeInfo());
+            var t2 = ctx.MapType(typeof(SubclassVanilla1).GetTypeInfo());
+            var t3 = ctx.MapType(typeof(SubclassVanilla2).GetTypeInfo());
 
             var abst = this.model.Add(t0, true);
 
             // define inheritance here...
             abst.AddSubType(100, t1);
-
-            Console.WriteLine(this.model.GetSchema(typeof(TradeVanilla)));
-            Console.WriteLine(this.model.GetSchema(typeof(IRSwapVanilla)));
+            abst.AddSubType(101, t2);
+            abst.AddSubType(102, t3);
 
             TradeVanilla foo = new IRSwapVanilla { SwapRate = 75, TradeDateTime = this.testDate };
 
             var bar = (TradeVanilla)this.model.DeepClone(foo);
+
             var cloneSwap = bar as IRSwapVanilla;
 
             Assert.AreEqual(this.testDate, bar.TradeDateTime);
             Assert.IsNotNull(cloneSwap);
             Assert.AreEqual(75, cloneSwap.SwapRate);
+
+            Console.WriteLine(this.model.GetSchema(typeof(TradeVanilla)));
+            Console.WriteLine(this.model.GetSchema(typeof(IRSwapVanilla)));
         }
 
         [Test(Description = "this shows how datacontracts fail by default")]

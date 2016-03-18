@@ -6,9 +6,7 @@ namespace FluentProtobufNet
 
     public class MappingConfiguration
     {
-        readonly PersistenceModel _model;
-
-        private readonly Func<object, int> indexor;
+        private readonly PersistenceModel _model;
 
         public MappingConfiguration(RuntimeTypeModel runtimeTypeModel, Func<object, int> indexor)
         {

@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PropertyHelper.cs" />
+    <Compile Include="TestConventionDrivenWcfMapping.cs" />
     <Compile Include="TestBasicWcfMapping.cs" />
     <Compile Include="DataMaps.cs" />
     <Compile Include="TestBasicMapping.cs" />

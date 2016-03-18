@@ -1,4 +1,6 @@
-﻿namespace FluentProtobufNet.Helpers
+﻿using System.Runtime.Serialization;
+
+namespace FluentProtobufNet.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -28,10 +30,15 @@
             return constructor != null ? constructor.Invoke(null) : constructor2.Invoke(new object[] { indexor(type) });
         }
 
-        public static bool HasAttribute<TAttribute>(this PropertyInfo arg)
+        public static bool HasAttribute<TAttribute>(this MemberInfo arg)
             where TAttribute : Attribute
         {
             return arg.GetCustomAttributes<TAttribute>(false).FirstOrDefault() != null;
+        }
+
+        public static bool IsDataContract(this Type type)
+        {
+            return type.HasAttribute<DataContractAttribute>();
         }
     }
 }

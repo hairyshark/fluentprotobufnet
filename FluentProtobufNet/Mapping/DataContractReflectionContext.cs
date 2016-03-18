@@ -1,14 +1,14 @@
-namespace FluentProtobufNet.Tests
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Context;
+using System.Runtime.Serialization;
+using FluentProtobufNet.Tests;
+using ProtoBuf;
+
+namespace FluentProtobufNet.Mapping
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Reflection.Context;
-    using System.Runtime.Serialization;
-
-    using ProtoBuf;
-
     public class DataContractReflectionContext : CustomReflectionContext
     {
         protected override IEnumerable<object> GetCustomAttributes(MemberInfo member,
