@@ -36,6 +36,11 @@ namespace FluentProtobufNet.Helpers
             return arg.GetCustomAttributes<TAttribute>(false).FirstOrDefault() != null;
         }
 
+        public static bool IsObject(this Type type)
+        {
+            return type.BaseType == null && type.FullName.Equals(typeof(object).FullName);
+        }
+
         public static bool IsDataContract(this Type type)
         {
             return type.HasAttribute<DataContractAttribute>();
