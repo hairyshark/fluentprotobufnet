@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentProtobufNet.Tests.WCF;
 using NUnit.Framework;
@@ -24,11 +25,14 @@ namespace FluentProtobufNet.Tests
                             m.FluentMappings.AddFromAssemblySource<TestConventionDrivenWcfMapping, WcfAssemblyTypeSource<NameSpaceSpecification<ExecutionVanilla>>>();
                         })
                     .BuildConfiguration();
+
+            this.ShowResults();
         }
 
         private Configuration _config;
 
         private RuntimeTypeModel _model;
+        private IEnumerable<MetaType> _modelTypes;
 
         [Test]
         public void TestCorrectlyMapsSingleLevelSubTypes()
@@ -69,6 +73,13 @@ namespace FluentProtobufNet.Tests
             Assert.IsNotNull(swap);
             Assert.AreEqual(10, swap.SwapRate);
             Assert.IsNullOrEmpty(clone.IgnoreMe);
+        }
+
+        private void ShowResults()
+        {
+            this._modelTypes = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
+
+            this._modelTypes.PrintSchemas(this._config);
         }
     }
 }

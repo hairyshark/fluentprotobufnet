@@ -23,6 +23,8 @@ namespace FluentProtobufNet.Tests
                     .WithIndexor(Indexor.GetIndex)
                     .Mappings(m => m.FluentMappings.AddFromAssemblySource<TestBasicMapping, AssemblyTypeSource<NameSpaceSpecification<Category>>>())
                     .BuildConfiguration();
+
+            this.ShowResults();
         }
 
         private Configuration _config;
@@ -33,15 +35,11 @@ namespace FluentProtobufNet.Tests
         {
             Assert.IsNotNull(this._config.RuntimeTypeModel);
             Assert.Greater(this._config.RuntimeTypeModel.GetTypes().Cast<object>().Count(), 0);
-
-            this.ShowResults();
         }
 
         [Test]
         public void CorrectlyMapsSingleLevelSubclasses()
         {
-            this.ShowResults();
-
             var category = this._modelTypes.SingleOrDefault(t => t.Type == typeof(Category));
 
             Assert.IsNotNull(category);
@@ -52,8 +50,6 @@ namespace FluentProtobufNet.Tests
         [Test]
         public void CorrectlyMapsUpToThirdLevelSubclass()
         {
-            this.ShowResults();
-
             var categoryWithDescription = this._modelTypes.SingleOrDefault(t => t.Type == typeof(CategoryWithDescription));
 
             Assert.IsNotNull(categoryWithDescription);

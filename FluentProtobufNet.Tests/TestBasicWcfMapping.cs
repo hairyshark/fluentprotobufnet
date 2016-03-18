@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -32,16 +33,20 @@ namespace FluentProtobufNet.Tests
                             m.FluentMappings.Add<WcfSubClassMap<SubclassVanilla2>>();
                         })
                     .BuildConfiguration();
+
+            this.ShowResults();
         }
 
         private Configuration _config;
 
         private RuntimeTypeModel _model;
+        private IEnumerable<MetaType> _modelTypes;
 
         [Test]
         public void TestCorrectlyMapsSingleLevelSubTypes()
         {
             var types = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
+
             var vanilla = types.SingleOrDefault(t => t.Type == typeof (TradeVanilla));
 
             Assert.IsNotNull(vanilla);
@@ -121,6 +126,13 @@ namespace FluentProtobufNet.Tests
             Assert.IsNotNull(swap);
             Assert.AreEqual(10, swap.SwapRate);
             Assert.IsNullOrEmpty(clone.IgnoreMe);
+        }
+
+        private void ShowResults()
+        {
+            this._modelTypes = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
+
+            this._modelTypes.PrintSchemas(this._config);
         }
     }
 }
