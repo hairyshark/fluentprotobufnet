@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FluentProtobufNet.Tests
+namespace FluentProtobufNet.Tests.Basic
 {
     public class Category
     {

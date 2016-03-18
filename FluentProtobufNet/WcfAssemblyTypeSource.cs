@@ -7,7 +7,8 @@ using FluentProtobufNet.Mapping;
 
 namespace FluentProtobufNet
 {
-    public class WcfAssemblyTypeSource : AssemblyTypeSource
+    public class WcfAssemblyTypeSource<TSpecification> : AssemblyTypeSource<TSpecification>
+        where TSpecification : ISpecification, new()
     {
         public WcfAssemblyTypeSource(Assembly source) : base(source)
         {
@@ -15,44 +16,27 @@ namespace FluentProtobufNet
 
         #region ITypeSource Members
 
-        public override IEnumerable<Type> GetTypes()
+        protected override IEnumerable<Type> GetPossibleTypes()
         {
-            var allDataContracts = base.GetTypes().Where(t => t.IsDataContract());
-
-            var types = new List<Type>();
-
-            foreach (var type in allDataContracts)
-            {
-                var baseType = type.BaseType;
-
-                if (baseType.IsDataContract())
-                {
-                    Console.WriteLine("adding WcfSubClassMap for {0}", type);
-
-                    types.Add(typeof(WcfSubClassMap<>).MakeGenericType(type));
-
-                }
-                else
-                {
-                    Console.WriteLine("adding WcfClassMap for {0}", type);
-
-                    types.Add(typeof(WcfClassMap<>).MakeGenericType(type));
-                }
-            }
-
-            return types;
+            return base.GetPossibleTypes().Where(t => t.IsDataContract());
         }
 
-        public void LogSource(IDiagnosticLogger logger)
+        protected override bool IsDerived(Type type)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
+            var baseTypeIsObject = type.BaseType.IsObject();
+            var baseIsDataContract = type.BaseType.IsDataContract();
 
-            logger.LoadedFluentMappingsFromSource(this);
+            return !baseTypeIsObject && baseIsDataContract;
         }
 
-        public string GetIdentifier()
+        public override Type ClassMapType
         {
-            return this.Source.GetName().FullName;
+            get { return typeof (WcfClassMap<>); }
+        }
+
+        public override Type SubClassMapType
+        {
+            get { return typeof(WcfSubClassMap<>); }
         }
 
         #endregion

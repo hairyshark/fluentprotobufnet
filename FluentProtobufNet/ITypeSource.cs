@@ -5,7 +5,7 @@ namespace FluentProtobufNet
 {
     public interface ITypeSource
     {
-        IEnumerable<Type> GetTypes();
+        IEnumerable<Type> GetTypeSources();
 
         string GetIdentifier();
     }

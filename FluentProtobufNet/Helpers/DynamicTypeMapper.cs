@@ -10,13 +10,6 @@ namespace FluentProtobufNet.Helpers
 
     public static class DynamicTypeMapper
     {
-        public static void DynamicSubclassMap<TMapper, TMessage>(this TMapper mapper, int subclassField, Func<PropertyInfo, int> indexor, Func<PropertyInfo, bool> selector = null) where TMapper : SubclassMap<TMessage>
-        {
-            mapper.SubclassFieldId(subclassField);
-
-            DynamicClassMap<TMapper, TMessage>(mapper, indexor, selector);
-        }
-
         public static void DynamicClassMap<TMapper, TMessage>(this TMapper mapper, Func<PropertyInfo, int> indexor, Func<PropertyInfo, bool> selector = null) where TMapper : ClassMap<TMessage>
         {
             // find every public invokable instance targetMember

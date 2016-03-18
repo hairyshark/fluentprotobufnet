@@ -2,10 +2,10 @@
 {
     using System.Runtime.Serialization;
 
-    using FluentProtobufNet.Helpers;
-    using FluentProtobufNet.Tests;
+    using Helpers;
+    using Tests;
 
-    public class WcfClassMap<T> : ClassMap<T>
+    public class WcfClassMap<T> : ClassMap<T>, IMapBaseClasses
     {
         public WcfClassMap()
         {
@@ -13,11 +13,11 @@
         }
     }
 
-    public class WcfSubClassMap<T> : SubclassMap<T>
+    public class WcfSubClassMap<T> : SubclassMap<T>, IMapSubClasses
     {
-        public WcfSubClassMap(int discriminator)
+        public WcfSubClassMap(int discriminator) : base(discriminator)
         {
-            this.DynamicSubclassMap<WcfSubClassMap<T>, T>(discriminator, Indexor.GetIndex, Extensions.HasAttribute<DataMemberAttribute>);
+            this.DynamicClassMap<WcfSubClassMap<T>, T>(Indexor.GetIndex, Extensions.HasAttribute<DataMemberAttribute>);
         }
     }
 }

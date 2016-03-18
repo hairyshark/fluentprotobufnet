@@ -35,25 +35,32 @@ namespace FluentProtobufNet
             var mapping = type.Instantiate(this._indexor);
 
             var provider = mapping as IMappingProvider;
+
             if (provider != null)
             {
-                var baseType = provider.GetType().BaseType;
+                var type1 = provider.GetType();
 
-                if (baseType != null && baseType.IsGenericType)
+                if (type1.IsMappingOf<IMapSubClasses>())
                 {
-                    if (baseType.GetGenericTypeDefinition() == typeof (ClassMap<>))
-                    {
-                        this.Log.FluentMappingDiscovered(type);
-                        this.Add(provider);
-                    }
-                    else if (baseType.GetGenericTypeDefinition() == typeof (SubclassMap<>))
-                    {
-                        this.AddSubclassMap(provider);
-                    }
+                    this.Log.FluentMappingDiscovered(type);
+
+                    this.AddSubclassMap(provider);
+                }
+                else if (type1.IsMappingOf<IMapBaseClasses>())
+                {
+                    this.Log.FluentMappingDiscovered(type);
+
+                    this.Add(provider);
+                }
+                else
+                {
+                    throw new InvalidOperationException("cant find any marker interface to register type source");
                 }
             }
             else
+            {
                 throw new InvalidOperationException("Unsupported mapping type '" + type.FullName + "'");
+            }
         }
 
         public void AddMappingsFromAssemblySource(Tuple<Assembly, Type> tuple)
@@ -65,14 +72,14 @@ namespace FluentProtobufNet
                 throw new InvalidOperationException("missing constructor public " + tuple.Item2.Name + "(Assembly assembly) on type " + tuple.Item2);
             }
 
-            var typeSourceInstance = constructorInfo.Invoke(new object[] {tuple.Item1});
+            var typeSourceInstance = constructorInfo.Invoke(new object[] { tuple.Item1 });
 
             this.AddMappingsFromSource((ITypeSource)typeSourceInstance);
         }
 
         public void AddMappingsFromSource(ITypeSource source)
         {
-            source.GetTypes().Where(IsMappingOf<IMappingProvider>).Each(this.Add);
+            source.GetTypeSources().Where(t => t.IsMappingOf<IMappingProvider>()).Each(this.Add);
 
             this.Log.LoadedFluentMappingsFromSource(source);
         }
@@ -90,10 +97,10 @@ namespace FluentProtobufNet
             }
 
             var subclassProvidersCopy = this._subclassProviders.ToList();
+
             IMappingProvider subclassMap;
-            while (
-                (subclassMap = subclassProvidersCopy.FirstOrDefault(sc => sc.CanBeResolvedUsing(this._protobufModel)))
-                != null)
+
+            while ((subclassMap = subclassProvidersCopy.FirstOrDefault(sc => sc.CanBeResolvedUsing(this._protobufModel))) != null)
             {
                 subclassMap.GetRuntimeTypeModel(this._protobufModel);
                 subclassProvidersCopy.Remove(subclassMap);
@@ -105,11 +112,6 @@ namespace FluentProtobufNet
             }
 
             cfg.RuntimeTypeModel = this._protobufModel;
-        }
-
-        private static bool IsMappingOf<T>(Type type)
-        {
-            return typeof (T).IsAssignableFrom(type);
         }
     }
 }

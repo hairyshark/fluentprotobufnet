@@ -1,10 +1,9 @@
-﻿namespace FluentProtobufNet.Tests
+﻿using System;
+using System.Runtime.Serialization;
+using ProtoBuf;
+
+namespace FluentProtobufNet.Tests.WCF
 {
-    using System;
-    using System.Runtime.Serialization;
-
-    using ProtoBuf;
-
     [ProtoContract]
     public class ExecutionProto
     {

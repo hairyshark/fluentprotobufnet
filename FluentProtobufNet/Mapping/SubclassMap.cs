@@ -5,36 +5,35 @@ using ProtoBuf.Meta;
 
 namespace FluentProtobufNet.Mapping
 {
-    public class SubclassMap<T>: ClassMap<T>
+    public class SubclassMap<T>: ClassMap<T>, IMapSubClasses
     {
-        private int _subclassFieldId;
-        private bool _fieldIdSet;
+        private readonly int _subclassFieldId;
+        private readonly bool _fieldIdSet;
 
-        public void SubclassFieldId(int fieldNumber)
+        public SubclassMap(int fieldNumber)
         {
-            ///­OnMemberMapped(member);
-
-            _subclassFieldId = fieldNumber;
-            _fieldIdSet = true;
+            this._subclassFieldId = fieldNumber;
+            this._fieldIdSet = true;
         }
 
         public override RuntimeTypeModel GetRuntimeTypeModel(RuntimeTypeModel protobufModel)
         {
-            if (!_fieldIdSet)
+            if (!this._fieldIdSet)
                 throw new SubclassFieldIdNotSetException("Field ID of subclass " + typeof (T).Name + " not set");
+
             base.GetRuntimeTypeModel(protobufModel);
 
             var types = protobufModel.GetTypes().Cast<MetaType>();
             var baseType =
                 types.SingleOrDefault(t => t.Type == typeof(T).BaseType);
 
-            if (baseType.GetSubtypes().Any(s => s.FieldNumber == _subclassFieldId))
+            if (baseType != null && baseType.GetSubtypes().Any(s => s.FieldNumber == this._subclassFieldId))
             {
                 throw new FieldIdAlreadyUsedException(this._subclassFieldId,
-                    baseType.GetSubtypes().First(s => s.FieldNumber == _subclassFieldId).DerivedType);
+                    baseType.GetSubtypes().First(s => s.FieldNumber == this._subclassFieldId).DerivedType);
             }
 
-            baseType.AddSubType(this._subclassFieldId, typeof (T));
+            if (baseType != null) baseType.AddSubType(this._subclassFieldId, typeof (T));
 
             return protobufModel;
         }

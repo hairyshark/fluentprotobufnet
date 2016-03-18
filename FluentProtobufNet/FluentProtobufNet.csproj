@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ISpecification.cs" />
+    <Compile Include="Mapping\IMapBaseClasses.cs" />
+    <Compile Include="Mapping\IMapSubClasses.cs" />
+    <Compile Include="NameSpaceSpecification.cs" />
     <Compile Include="WcfAssemblyTypeSource.cs" />
     <Compile Include="AssemblyTypeSource.cs" />
     <Compile Include="Exceptions\InstantiationException.cs" />

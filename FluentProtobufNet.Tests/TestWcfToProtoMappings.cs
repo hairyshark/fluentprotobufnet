@@ -1,4 +1,5 @@
 ﻿using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Tests.WCF;
 
 namespace FluentProtobufNet.Tests
 {
@@ -26,7 +27,7 @@ namespace FluentProtobufNet.Tests
         }
 
         [Test(Description = "map from datacontracts into protobuf contracts meets our requirement with no inferred names BUT DOESN'T WORK FOR PROTOBUF-NET REASONS")]
-        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Type is not expected, and no contract can be inferred: FluentProtobufNet.Tests.IRSwapVanilla")]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Type is not expected, and no contract can be inferred: FluentProtobufNet.Tests.WCF.IRSwapVanilla")]
         public void RuntimeInheritanceFailsVanillaWithCustomReflectionWithNoInferredNames()
         {
             this.model.InferTagFromNameDefault = false;

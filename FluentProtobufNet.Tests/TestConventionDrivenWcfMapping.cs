@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FluentProtobufNet.Tests.WCF;
 using NUnit.Framework;
 using ProtoBuf.Meta;
 
@@ -20,7 +21,7 @@ namespace FluentProtobufNet.Tests
                     .Mappings(
                         m =>
                         {
-                            m.FluentMappings.AddFromAssemblySource<ExecutionVanilla, WcfAssemblyTypeSource>();
+                            m.FluentMappings.AddFromAssemblySource<TestConventionDrivenWcfMapping, WcfAssemblyTypeSource<NameSpaceSpecification<ExecutionVanilla>>>();
                         })
                     .BuildConfiguration();
         }

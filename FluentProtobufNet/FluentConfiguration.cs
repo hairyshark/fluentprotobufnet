@@ -53,6 +53,7 @@ namespace FluentProtobufNet
         public FluentConfiguration Mappings(Action<MappingConfiguration> mappings)
         {
             this._mappingsBuilders.Add(mappings);
+
             return this;
         }
 

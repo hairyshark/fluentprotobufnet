@@ -45,5 +45,10 @@ namespace FluentProtobufNet.Helpers
         {
             return type.HasAttribute<DataContractAttribute>();
         }
+
+        public static bool IsMappingOf<T>(this Type type)
+        {
+            return typeof(T).IsAssignableFrom(type);
+        }
     }
 }

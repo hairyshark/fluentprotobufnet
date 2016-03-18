@@ -1,4 +1,6 @@
-﻿namespace FluentProtobufNet.Tests
+﻿using FluentProtobufNet.Tests.Basic;
+
+namespace FluentProtobufNet.Tests
 {
     using System.Linq;
 
@@ -18,7 +20,7 @@
                 Fluently.Configure()
                     .WithModel(runtimeTypeModel)
                     .WithIndexor(Indexor.GetIndex)
-                    .Mappings(m => m.FluentMappings.AddFromAssemblySource<CategoryMap, AssemblyTypeSource>())
+                    .Mappings(m => m.FluentMappings.AddFromAssemblySource<TestBasicMapping, AssemblyTypeSource<NameSpaceSpecification<Category>>>())
                     .BuildConfiguration();
         }
 

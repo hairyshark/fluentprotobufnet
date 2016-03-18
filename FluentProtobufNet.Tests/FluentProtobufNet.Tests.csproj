@@ -50,9 +50,9 @@
     <Compile Include="DataMaps.cs" />
     <Compile Include="TestBasicMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BasicTestClasses.cs" />
+    <Compile Include="Basic\BasicTestClasses.cs" />
     <Compile Include="TestHelpers.cs" />
-    <Compile Include="WcfTestClasses.cs" />
+    <Compile Include="WCF\WcfTestClasses.cs" />
     <Compile Include="TestWcfToProtoMappings.cs" />
   </ItemGroup>
   <ItemGroup>

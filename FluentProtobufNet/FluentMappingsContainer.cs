@@ -10,19 +10,17 @@ namespace FluentProtobufNet
 
         private readonly List<Type> _types = new List<Type>();
 
-        public bool WasUsed { get; set; }
-
         /// <summary>
         ///     Add all fluent mappings in the assembly that contains T.
         /// </summary>
-        /// <typeparam name="T">Type from the assembly</typeparam>
         /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TType"></typeparam>
         /// <returns>Fluent mappings configuration</returns>
-        public FluentMappingsContainer AddFromAssemblySource<T, TSource>()
-            where T : class
+        public FluentMappingsContainer AddFromAssemblySource<TType, TSource>()
+            where TType : class
             where TSource : ITypeSource
         {
-            return this.AddFromAssemblySource(typeof (T).Assembly, typeof(TSource));
+            return this.AddFromAssemblySource(typeof(TType).Assembly, typeof(TSource));
         }
 
         /// <summary>
@@ -34,7 +32,6 @@ namespace FluentProtobufNet
         private FluentMappingsContainer AddFromAssemblySource(Assembly assembly, Type typeSource)
         {
             this._assemblySources.Add(new Tuple<Assembly, Type>(assembly, typeSource));
-            this.WasUsed = true;
             return this;
         }
 
@@ -58,8 +55,6 @@ namespace FluentProtobufNet
                 throw new ArgumentNullException("type");
 
             this._types.Add(type);
-
-            this.WasUsed = true;
 
             return this;
         }
