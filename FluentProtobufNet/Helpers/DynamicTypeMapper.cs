@@ -8,7 +8,7 @@ namespace FluentProtobufNet.Helpers
 {
     using System.Collections.Generic;
 
-    using FluentProtobufNet.Specification;
+    using Specification;
 
     public static class DynamicTypeMapper
     {

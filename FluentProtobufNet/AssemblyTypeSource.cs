@@ -66,14 +66,14 @@ namespace FluentProtobufNet
 
         protected void AddSubClassMapType(Type type, List<Type> types)
         {
-            Console.WriteLine("adding "+ this.ClassMapType + " for {0}", type);
+            Console.WriteLine("adding "+ this.SubClassMapType + " for {0}", type);
 
             types.Add(this.SubClassMapType.MakeGenericType(type));
         }
 
         protected void AddClassMapType(Type type, List<Type> types)
         {
-            Console.WriteLine("adding " + this.SubClassMapType + " for {0}", type);
+            Console.WriteLine("adding " + this.ClassMapType + " for {0}", type);
 
             types.Add(this.ClassMapType.MakeGenericType(type));
         }

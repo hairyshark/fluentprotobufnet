@@ -38,15 +38,15 @@ namespace FluentProtobufNet
 
             if (provider != null)
             {
-                var type1 = provider.GetType();
+                var providerType = provider.GetType();
 
-                if (type1.IsMappingOf<IMapSubClasses>())
+                if (providerType.IsMappingOf<IMapSubClasses>())
                 {
                     this.Log.FluentMappingDiscovered(type);
 
                     this.AddSubclassMap(provider);
                 }
-                else if (type1.IsMappingOf<IMapBaseClasses>())
+                else if (providerType.IsMappingOf<IMapBaseClasses>())
                 {
                     this.Log.FluentMappingDiscovered(type);
 
@@ -108,7 +108,7 @@ namespace FluentProtobufNet
 
             if (subclassProvidersCopy.Any())
             {
-                throw new Exception("Couldn't resolve all subclasses");
+                throw new Exception("Couldn't resolve all subclasses. We can't leave floaters.");
             }
 
             cfg.RuntimeTypeModel = this._protobufModel;

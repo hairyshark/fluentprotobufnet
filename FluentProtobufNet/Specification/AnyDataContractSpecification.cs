@@ -2,7 +2,7 @@ namespace FluentProtobufNet.Specification
 {
     using System;
 
-    using FluentProtobufNet.Helpers;
+    using Helpers;
 
     public class AnyDataContractSpecification : ISpecification<Type>
     {
@@ -12,7 +12,7 @@ namespace FluentProtobufNet.Specification
 
             if (isSatisfied)
             {
-                Console.WriteLine("satisfied with " + type.Name);
+                Console.WriteLine("satisfied that [" + type.FullName + "] is a datacontract");
             }
 
             return isSatisfied;

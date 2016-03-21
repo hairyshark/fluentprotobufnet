@@ -41,7 +41,7 @@ namespace FluentProtobufNet.Helpers
             return type.BaseType == null && type.FullName.Equals(typeof(object).FullName);
         }
 
-        public static bool IsDataContract(this Type type)
+        public static bool IsDataContract(this MemberInfo type)
         {
             return type.HasAttribute<DataContractAttribute>();
         }

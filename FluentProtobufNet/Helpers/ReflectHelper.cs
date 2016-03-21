@@ -24,7 +24,7 @@ namespace FluentProtobufNet.Helpers
             }
             catch (Exception e)
             {
-                throw new InstantiationException("A default (no-arg) constructor could not be found for: ", e, type);
+                throw new InstantiationException(e, type);
             }
         }
 
@@ -46,7 +46,7 @@ namespace FluentProtobufNet.Helpers
             }
             catch (Exception e)
             {
-                throw new InstantiationException("A default (no-arg) constructor could not be found for: ", e, type);
+                throw new InstantiationException(e, type);
             }
         }
     }

@@ -25,15 +25,14 @@ namespace FluentProtobufNet
 
         protected override bool IsDerived(Type type)
         {
-            var baseTypeIsObject = type.BaseType.IsObject();
             var baseIsDataContract = type.BaseType.IsDataContract();
 
-            return !baseTypeIsObject && baseIsDataContract;
+            return baseIsDataContract;
         }
 
         public override Type ClassMapType
         {
-            get { return typeof (WcfClassMap<>); }
+            get { return typeof(WcfClassMap<>); }
         }
 
         public override Type SubClassMapType

@@ -10,7 +10,7 @@ namespace FluentProtobufNet.Mapping
         private readonly int _subclassFieldId;
         private readonly bool _fieldIdSet;
 
-        public SubclassMap(int fieldNumber)
+        protected SubclassMap(int fieldNumber)
         {
             this._subclassFieldId = fieldNumber;
             this._fieldIdSet = true;

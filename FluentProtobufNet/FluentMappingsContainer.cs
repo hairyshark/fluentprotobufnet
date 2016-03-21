@@ -41,7 +41,7 @@ namespace FluentProtobufNet
         /// <returns>Fluent mappings configuration</returns>
         public FluentMappingsContainer Add<T>()
         {
-            return this.Add(typeof (T));
+            return this.Add(typeof(T));
         }
 
         /// <summary>

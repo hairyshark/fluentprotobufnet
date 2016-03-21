@@ -10,7 +10,7 @@ namespace FluentProtobufNet.Mapping
 {
     public abstract class ClassMap<T> : IMappingProvider, IMapBaseClasses
     {
-        public ClassMap()
+        protected ClassMap()
         {
             this.Fields = new List<PropertyMapping>();
         }

@@ -1,3 +1,7 @@
+using System.Linq;
+using System.Runtime.Serialization;
+using FluentProtobufNet.Helpers;
+
 namespace FluentProtobufNet.Specification
 {
     using System;
@@ -8,21 +12,24 @@ namespace FluentProtobufNet.Specification
     {
         public ReferenceSpecification()
         {
-            this.DynamicType = typeof(TMessage);
+            this.DynamicType = typeof(TMessage).FullName;
         }
 
-        public Type DynamicType { get; set; }
+        public string DynamicType { get; set; }
 
         public bool IsSatisfied(PropertyInfo type)
         {
-            var isSatisfied = type.Name.Equals(this.DynamicType.Name);
+            var isDataContract = type.PropertyType.IsDataContract();
 
-            if (isSatisfied)
-            {
-                Console.WriteLine("satisfied with " + type.Name + "on message " + this.DynamicType);
-            }
+            if (!isDataContract) return false;
 
-            return isSatisfied;
+            var dc = type.PropertyType.GetCustomAttributes<DataContractAttribute>().FirstOrDefault();
+
+            if (dc == null || !dc.IsReference) return false;
+
+            Console.WriteLine("satisfied that [" + type.PropertyType.Name + "] on member [" + this.DynamicType + "] is a Reference Type");
+
+            return true;
         }
     }
 }
