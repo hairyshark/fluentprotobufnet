@@ -65,7 +65,7 @@
       <Name>FluentProtobufNet</Name>
     </ProjectReference>
     <ProjectReference Include="..\protobuf-net\protobuf-net.csproj">
-      <Project>{8374e4d7-2a91-48f1-9360-09b09cf27c3f}</Project>
+      <Project>{8374E4D7-2A91-48F1-9360-09B09CF27C3F}</Project>
       <Name>protobuf-net</Name>
     </ProjectReference>
   </ItemGroup>
