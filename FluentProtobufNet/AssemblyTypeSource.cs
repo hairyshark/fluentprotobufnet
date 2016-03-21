@@ -7,8 +7,10 @@ using FluentProtobufNet.Mapping;
 
 namespace FluentProtobufNet
 {
+    using FluentProtobufNet.Specification;
+
     public class AssemblyTypeSource<TSpecification> : ITypeSource
-        where TSpecification : ISpecification, new()
+        where TSpecification : ISpecification<Type>, new()
     {
         protected readonly Assembly Source;
         private readonly TSpecification specification;
@@ -64,14 +66,14 @@ namespace FluentProtobufNet
 
         protected void AddSubClassMapType(Type type, List<Type> types)
         {
-            Console.WriteLine("adding SubClassMapType for {0}", type);
+            Console.WriteLine("adding "+ this.ClassMapType + " for {0}", type);
 
             types.Add(this.SubClassMapType.MakeGenericType(type));
         }
 
         protected void AddClassMapType(Type type, List<Type> types)
         {
-            Console.WriteLine("adding ClassMapType for {0}", type);
+            Console.WriteLine("adding " + this.SubClassMapType + " for {0}", type);
 
             types.Add(this.ClassMapType.MakeGenericType(type));
         }
@@ -90,12 +92,12 @@ namespace FluentProtobufNet
 
         public virtual Type ClassMapType
         {
-            get { return typeof (ClassMap<>); }
+            get { return typeof (DynamicClassMap<>); }
         }
 
         public virtual Type SubClassMapType
         {
-            get { return typeof(SubclassMap<>); }
+            get { return typeof(DynamicSubclassMap<>); }
         }
 
         #endregion

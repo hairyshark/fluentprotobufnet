@@ -8,7 +8,7 @@ using ProtoBuf.Meta;
 
 namespace FluentProtobufNet.Mapping
 {
-    public class ClassMap<T> : IMappingProvider, IMapBaseClasses
+    public abstract class ClassMap<T> : IMappingProvider, IMapBaseClasses
     {
         public ClassMap()
         {
@@ -55,7 +55,7 @@ namespace FluentProtobufNet.Mapping
                 Member = member,
                 FieldNumber = fieldNumber,
                 AsReference = false,
-                Type = typeof (T)
+                Type = typeof(T)
             };
             this.Fields.Add(field);
 
@@ -82,7 +82,7 @@ namespace FluentProtobufNet.Mapping
                 Member = member,
                 FieldNumber = fieldNumber,
                 AsReference = true,
-                Type = typeof (T)
+                Type = typeof(T)
             };
             this.Fields.Add(field);
 

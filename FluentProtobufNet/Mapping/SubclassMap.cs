@@ -5,7 +5,7 @@ using ProtoBuf.Meta;
 
 namespace FluentProtobufNet.Mapping
 {
-    public class SubclassMap<T>: ClassMap<T>, IMapSubClasses
+    public abstract class SubclassMap<T>: ClassMap<T>, IMapSubClasses
     {
         private readonly int _subclassFieldId;
         private readonly bool _fieldIdSet;

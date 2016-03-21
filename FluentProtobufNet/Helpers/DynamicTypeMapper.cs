@@ -8,9 +8,13 @@ namespace FluentProtobufNet.Helpers
 {
     using System.Collections.Generic;
 
+    using FluentProtobufNet.Specification;
+
     public static class DynamicTypeMapper
     {
-        public static void DynamicClassMap<TMapper, TMessage>(this TMapper mapper, Func<PropertyInfo, int> indexor, Func<PropertyInfo, bool> selector = null) where TMapper : ClassMap<TMessage>
+        public static void BuildUp<TMapper, TMessage, TReferenceSpecification>(this TMapper mapper, Func<PropertyInfo, int> indexor, Func<PropertyInfo, bool> selector = null) 
+            where TMapper : ClassMap<TMessage>
+            where TReferenceSpecification : ISpecification<PropertyInfo>, new()
         {
             // find every public invokable instance targetMember
             const BindingFlags flags = BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance;
@@ -22,7 +26,7 @@ namespace FluentProtobufNet.Helpers
                 propertyInfos = propertyInfos.Where(selector);
             }
 
-            foreach (var buildResult in propertyInfos.Select(p => Build<TMessage>(p, indexor)))
+            foreach (var buildResult in propertyInfos.Select(p => Build<TMessage>(p, indexor, new TReferenceSpecification())))
             {
                 if (buildResult.Item2)
                 {
@@ -35,7 +39,7 @@ namespace FluentProtobufNet.Helpers
             }
         }
 
-        private static Tuple<Expression<Func<TMessage, object>>, bool, int> Build<TMessage>(PropertyInfo targetMember, Func<PropertyInfo, int> indexor)
+        private static Tuple<Expression<Func<TMessage, object>>, bool, int> Build<TMessage>(PropertyInfo targetMember, Func<PropertyInfo, int> indexor, ISpecification<PropertyInfo> referenceSpecification)
         {
             ParameterExpression typeParam = Expression.Parameter(typeof(TMessage), "m");
 
@@ -45,7 +49,7 @@ namespace FluentProtobufNet.Helpers
 
             var expression = Expression.Lambda<Func<TMessage, object>>(castedToObject, typeParam);
 
-            var isReference = targetMember.PropertyType == typeof(TMessage);
+            var isReference = referenceSpecification.IsSatisfied(targetMember);
 
             return new Tuple<Expression<Func<TMessage, object>>, bool, int>(expression, isReference, indexor(targetMember));
         }

@@ -1,14 +1,17 @@
-﻿using System.Runtime.Serialization;
-using FluentProtobufNet.Helpers;
-using FluentProtobufNet.Tests;
-
-namespace FluentProtobufNet.Mapping
+﻿namespace FluentProtobufNet.Mapping
 {
-    public class WcfClassMap<T> : ClassMap<T>, IMapBaseClasses
+    using System.Runtime.Serialization;
+
+    using FluentProtobufNet.Helpers;
+    using FluentProtobufNet.Specification;
+    using FluentProtobufNet.Tests;
+
+    public class WcfClassMap<T> : ClassMap<T>
+        where T : class
     {
         public WcfClassMap()
         {
-            this.DynamicClassMap<WcfClassMap<T>, T>(Indexor.GetIndex, Extensions.HasAttribute<DataMemberAttribute>);
+            this.BuildUp<WcfClassMap<T>, T, ReferenceSpecification<T>>(Indexor.GetIndex, Extensions.HasAttribute<DataMemberAttribute>);
         }
     }
 }

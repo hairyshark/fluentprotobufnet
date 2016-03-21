@@ -7,8 +7,10 @@ using FluentProtobufNet.Mapping;
 
 namespace FluentProtobufNet
 {
+    using FluentProtobufNet.Specification;
+
     public class WcfAssemblyTypeSource<TSpecification> : AssemblyTypeSource<TSpecification>
-        where TSpecification : ISpecification, new()
+        where TSpecification : ISpecification<Type>, new()
     {
         public WcfAssemblyTypeSource(Assembly source) : base(source)
         {

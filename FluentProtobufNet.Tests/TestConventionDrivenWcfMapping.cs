@@ -7,6 +7,8 @@ using ProtoBuf.Meta;
 
 namespace FluentProtobufNet.Tests
 {
+    using FluentProtobufNet.Specification;
+
     [TestFixture]
     public class TestConventionDrivenWcfMapping
     {
@@ -30,7 +32,6 @@ namespace FluentProtobufNet.Tests
         }
 
         private Configuration _config;
-
         private RuntimeTypeModel _model;
         private IEnumerable<MetaType> _modelTypes;
 

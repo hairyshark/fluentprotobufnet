@@ -3,7 +3,11 @@ using FluentProtobufNet.Tests.Basic;
 
 namespace FluentProtobufNet.Tests
 {
+    using System;
     using System.Linq;
+
+    using FluentProtobufNet.Specification;
+    using FluentProtobufNet.Tests.Proto;
 
     using NUnit.Framework;
 
@@ -15,11 +19,11 @@ namespace FluentProtobufNet.Tests
         [SetUp]
         public void Setup()
         {
-            var runtimeTypeModel = TypeModel.Create();
+            this._model = TypeModel.Create();
 
             this._config =
                 Fluently.Configure()
-                    .WithModel(runtimeTypeModel)
+                    .WithModel(this._model)
                     .WithIndexor(Indexor.GetIndex)
                     .Mappings(m => m.FluentMappings.AddFromAssemblySource<TestBasicMapping, AssemblyTypeSource<NameSpaceSpecification<Category>>>())
                     .BuildConfiguration();
@@ -29,6 +33,8 @@ namespace FluentProtobufNet.Tests
 
         private Configuration _config;
         private IEnumerable<MetaType> _modelTypes;
+
+        private RuntimeTypeModel _model;
 
         [Test]
         public void CanBuildConfiguration()
@@ -62,6 +68,34 @@ namespace FluentProtobufNet.Tests
             this._modelTypes = this._config.RuntimeTypeModel.GetTypes().Cast<MetaType>();
 
             this._modelTypes.PrintSchemas(this._config);
+        }
+
+        [Test]
+        public void TestRoundTripBaseType()
+        {
+            var obj = new Category()
+            {
+                Name = "Foo",
+                ParentCategory = new CategoryWithDescription { Name = "Bar", Description = "ScoobyDoo" },
+                Items = new[]
+                            {
+                                new Item { Definition = "abc", MainCategory = new CategoryThirdLevel { Description = "bananas" } }, 
+                                new Item { Definition = "def", MainCategory = new CategoryThirdLevel { Description = "apples" } }, 
+                                new Item { Definition = "ghi", MainCategory = new CategoryThirdLevel { Description = "oranges" } }
+                            }
+            };
+
+            var clone = obj.RoundTrip(this._model);
+
+            Assert.IsNotNull(clone);
+            var subclass = clone.ParentCategory as CategoryWithDescription;
+
+            Assert.AreEqual("Foo", clone.Name);
+            Assert.AreEqual("Bar", clone.ParentCategory.Name);
+            Assert.IsNotNull(subclass);
+            Assert.AreEqual("ScoobyDoo", subclass.Description);
+
+            Assert.AreEqual(3, clone.Items.Count);
         }
     }
 }

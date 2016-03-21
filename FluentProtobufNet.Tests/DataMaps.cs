@@ -7,7 +7,7 @@ namespace FluentProtobufNet.Tests
 //    {
 //        public CategoryMap()
 //        {
-//            this.DynamicClassMap<CategoryMap, Category>(Indexor.GetIndex);
+//            this.BuildUp<CategoryMap, Category>(Indexor.GetIndex);
 //        }
 //    }
 //
@@ -31,7 +31,7 @@ namespace FluentProtobufNet.Tests
 //    {
 //        public ItemMap()
 //        {
-//            this.DynamicClassMap<ItemMap, Item>(Indexor.GetIndex);
+//            this.BuildUp<ItemMap, Item>(Indexor.GetIndex);
 //        }
 //    }
 }

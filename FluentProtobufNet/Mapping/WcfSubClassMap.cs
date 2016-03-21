@@ -2,14 +2,17 @@
 {
     using System.Runtime.Serialization;
 
+    using FluentProtobufNet.Specification;
+
     using Helpers;
     using Tests;
 
-    public class WcfSubClassMap<T> : SubclassMap<T>, IMapSubClasses
+    public class WcfSubClassMap<T> : SubclassMap<T>
+        where T : class
     {
         public WcfSubClassMap(int discriminator) : base(discriminator)
         {
-            this.DynamicClassMap<WcfSubClassMap<T>, T>(Indexor.GetIndex, Extensions.HasAttribute<DataMemberAttribute>);
+            this.BuildUp<WcfSubClassMap<T>, T, ReferenceSpecification<T>>(Indexor.GetIndex, Extensions.HasAttribute<DataMemberAttribute>);
         }
     }
 }

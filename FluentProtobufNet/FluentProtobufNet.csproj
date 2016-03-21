@@ -41,11 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISpecification.cs" />
+    <Compile Include="Mapping\DynamicClassMap.cs" />
+    <Compile Include="Mapping\DynamicSubclassMap.cs" />
+    <Compile Include="Specification\AnyDataContractSpecification.cs" />
+    <Compile Include="Specification\ISpecification.cs" />
     <Compile Include="Mapping\IMapBaseClasses.cs" />
     <Compile Include="Mapping\IMapSubClasses.cs" />
     <Compile Include="Mapping\WcfClassMap.cs" />
-    <Compile Include="NameSpaceSpecification.cs" />
+    <Compile Include="Specification\NameSpaceSpecification.cs" />
+    <Compile Include="Specification\ReferenceSpecification.cs" />
     <Compile Include="WcfAssemblyTypeSource.cs" />
     <Compile Include="AssemblyTypeSource.cs" />
     <Compile Include="Exceptions\InstantiationException.cs" />
