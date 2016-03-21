@@ -25,12 +25,17 @@ namespace FluentProtobufNet
             this._indexor = indexor;
         }
 
-        public void Add(IMappingProvider provider)
+        public void AddClassMap(IMappingProvider provider)
         {
             this.ClassProviders.Add(provider);
         }
 
-        public void Add(Type type)
+        public void AddSubclassMap(IMappingProvider provider)
+        {
+            this._subclassProviders.Add(provider);
+        }
+
+        public void RegisterModelType(Type type)
         {
             var mapping = type.Instantiate(this._indexor);
 
@@ -50,7 +55,7 @@ namespace FluentProtobufNet
                 {
                     this.Log.FluentMappingDiscovered(type);
 
-                    this.Add(provider);
+                    this.AddClassMap(provider);
                 }
                 else
                 {
@@ -63,7 +68,7 @@ namespace FluentProtobufNet
             }
         }
 
-        public void AddMappingsFromAssemblySource(Tuple<Assembly, Type> tuple)
+        public void RegisterModelTypesFromAssemblySource(Tuple<Assembly, Type> tuple)
         {
             var constructorInfo = tuple.Item2.GetConstructor(new[] { typeof(Assembly) });
 
@@ -79,14 +84,9 @@ namespace FluentProtobufNet
 
         public void AddMappingsFromSource(ITypeSource source)
         {
-            source.GetTypeSources().Where(t => t.IsMappingOf<IMappingProvider>()).Each(this.Add);
+            source.GetTypeSources().Where(t => t.IsMappingOf<IMappingProvider>()).Each(this.RegisterModelType);
 
             this.Log.LoadedFluentMappingsFromSource(source);
-        }
-
-        public void AddSubclassMap(IMappingProvider provider)
-        {
-            this._subclassProviders.Add(provider);
         }
 
         public virtual void Configure(Configuration cfg)

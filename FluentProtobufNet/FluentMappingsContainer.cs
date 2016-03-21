@@ -11,7 +11,7 @@ namespace FluentProtobufNet
         private readonly List<Type> _types = new List<Type>();
 
         /// <summary>
-        ///     Add all fluent mappings in the assembly that contains T.
+        ///     AddClassMap all fluent mappings in the assembly that contains T.
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TType"></typeparam>
@@ -24,7 +24,7 @@ namespace FluentProtobufNet
         }
 
         /// <summary>
-        ///     Add all fluent mappings in the assembly
+        ///     AddClassMap all fluent mappings in the assembly
         /// </summary>
         /// <param name="assembly">Assembly to add mappings from</param>
         /// <param name="typeSource"></param>
@@ -63,12 +63,12 @@ namespace FluentProtobufNet
         {
             foreach (var tuple in this._assemblySources)
             {
-                model.AddMappingsFromAssemblySource(tuple);
+                model.RegisterModelTypesFromAssemblySource(tuple);
             }
 
             foreach (var type in this._types)
             {
-                model.Add(type);
+                model.RegisterModelType(type);
             }
         }
     }
