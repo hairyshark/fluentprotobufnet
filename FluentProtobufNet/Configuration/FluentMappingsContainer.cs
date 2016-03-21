@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Sources;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Configuration
 {
     public class FluentMappingsContainer
     {
@@ -63,12 +65,12 @@ namespace FluentProtobufNet
         {
             foreach (var tuple in this._assemblySources)
             {
-                model.RegisterModelTypesFromAssemblySource(tuple);
+                model.AddTypes(tuple);
             }
 
             foreach (var type in this._types)
             {
-                model.RegisterModelType(type);
+                model.AddType(type);
             }
         }
     }

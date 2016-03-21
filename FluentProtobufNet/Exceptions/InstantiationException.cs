@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Exceptions
 {
     public class InstantiationException : Exception
     {

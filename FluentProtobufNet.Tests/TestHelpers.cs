@@ -92,7 +92,7 @@ namespace FluentProtobufNet.Tests
             Console.WriteLine();
         }
 
-        public static void PrintSchemas(this IEnumerable<MetaType> types, Configuration config)
+        public static void PrintSchemas(this IEnumerable<MetaType> types, Configuration.Configuration config)
         {
             types.Each(t => Console.WriteLine(config.RuntimeTypeModel.GetSchema(t.Type)));
         }

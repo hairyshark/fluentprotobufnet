@@ -1,4 +1,8 @@
-﻿using Insight.Messaging.OTC.OrderAPI.BusinessEntities;
+﻿using System;
+using System.Runtime.Serialization;
+using FluentProtobufNet.Configuration;
+using FluentProtobufNet.Sources;
+using Insight.Messaging.OTC.OrderAPI.BusinessEntities;
 
 namespace TradeReaderService
 {
@@ -30,7 +34,7 @@ namespace TradeReaderService
             this._config =
                 Fluently.Configure()
                     .WithModel(this._model)
-                    .WithIndexor(Indexor.GetIndex)
+                    .WithIndexor(SeededIndexor.GetIndex)
                     .Mappings(
                         m =>
                             {
@@ -56,6 +60,19 @@ namespace TradeReaderService
         {
             Assert.IsNotNull(this._config.RuntimeTypeModel);
             Assert.Greater(this._config.RuntimeTypeModel.GetTypes().Cast<object>().Count(), 0);
+
+            var schema = this._model.GetSchema(typeof (ExecutionNew));
+
+            Assert.IsNotNull(schema);
+
+            Console.WriteLine(schema);
+        }
+
+        [Test]
+        public void TestVisitWcfVanillaDataContracts()
+        {
+            typeof(ExecutionNew).GetTypeInfo()
+                .Visit<DataContractAttribute, DataMemberAttribute, KnownTypeAttribute>();
         }
 
         [Test]

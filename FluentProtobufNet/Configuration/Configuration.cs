@@ -1,6 +1,6 @@
 using ProtoBuf.Meta;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Configuration
 {
     public class Configuration
     {

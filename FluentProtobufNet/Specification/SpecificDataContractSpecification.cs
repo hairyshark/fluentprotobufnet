@@ -2,7 +2,7 @@ namespace FluentProtobufNet.Specification
 {
     using System;
 
-    using FluentProtobufNet.Helpers;
+    using Helpers;
 
     public class SpecificDataContractSpecification<TDataContract> : ISpecification<Type>
     {

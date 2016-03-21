@@ -4,11 +4,10 @@ using System.Linq;
 using System.Reflection;
 using FluentProtobufNet.Helpers;
 using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Specification;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Sources
 {
-    using FluentProtobufNet.Specification;
-
     public class WcfAssemblyTypeSource<TSpecification> : AssemblyTypeSource<TSpecification>
         where TSpecification : ISpecification<Type>, new()
     {

@@ -1,9 +1,8 @@
-namespace FluentProtobufNet
+using System;
+using ProtoBuf.Meta;
+
+namespace FluentProtobufNet.Configuration
 {
-    using System;
-
-    using ProtoBuf.Meta;
-
     public class MappingConfiguration
     {
         private readonly PersistenceModel _model;
@@ -17,7 +16,7 @@ namespace FluentProtobufNet
 
         public FluentMappingsContainer FluentMappings { get; set; }
 
-        public void Apply(Configuration cfg)
+        public void Apply(FluentProtobufNet.Configuration.Configuration cfg)
         {
             this.FluentMappings.Apply(this._model);
 

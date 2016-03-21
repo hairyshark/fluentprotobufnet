@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentProtobufNet.Sources;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Logging
 {
     public class NullDiagnosticsLogger : IDiagnosticLogger
     {

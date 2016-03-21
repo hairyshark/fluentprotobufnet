@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using FluentProtobufNet.Helpers;
+using FluentProtobufNet.Logging;
 using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Sources;
 using ProtoBuf.Meta;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Configuration
 {
     public class PersistenceModel
     {
@@ -35,7 +37,7 @@ namespace FluentProtobufNet
             this._subclassProviders.Add(provider);
         }
 
-        public void RegisterModelType(Type type)
+        public void AddType(Type type)
         {
             var mapping = type.Instantiate(this._indexor);
 
@@ -68,7 +70,7 @@ namespace FluentProtobufNet
             }
         }
 
-        public void RegisterModelTypesFromAssemblySource(Tuple<Assembly, Type> tuple)
+        public void AddTypes(Tuple<Assembly, Type> tuple)
         {
             var constructorInfo = tuple.Item2.GetConstructor(new[] { typeof(Assembly) });
 
@@ -79,17 +81,17 @@ namespace FluentProtobufNet
 
             var typeSourceInstance = constructorInfo.Invoke(new object[] { tuple.Item1 });
 
-            this.AddMappingsFromSource((ITypeSource)typeSourceInstance);
+            this.Add((ITypeSource)typeSourceInstance);
         }
 
-        public void AddMappingsFromSource(ITypeSource source)
+        public void Add(ITypeSource source)
         {
-            source.GetTypeSources().Where(t => t.IsMappingOf<IMappingProvider>()).Each(this.RegisterModelType);
+            source.GetTypeSources().Where(t => t.IsMappingOf<IMappingProvider>()).Each(this.AddType);
 
             this.Log.LoadedFluentMappingsFromSource(source);
         }
 
-        public virtual void Configure(Configuration cfg)
+        public virtual void Configure(FluentProtobufNet.Configuration.Configuration cfg)
         {
             foreach (var classMap in this.ClassProviders)
             {

@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using FluentProtobufNet.Helpers;
 using FluentProtobufNet.Specification;
-using FluentProtobufNet.Tests;
 
 namespace FluentProtobufNet.Mapping
 {
@@ -10,7 +9,7 @@ namespace FluentProtobufNet.Mapping
     {
         public WcfSubClassMap(int discriminator) : base(discriminator)
         {
-            this.BuildUp<WcfSubClassMap<T>, T, ReferenceSpecification<T>>(Indexor.GetIndex,
+            this.BuildUp<WcfSubClassMap<T>, T, DatacontractReferenceSpecification<T>>(SeededIndexor.GetIndex,
                 Extensions.HasAttribute<DataMemberAttribute>);
         }
     }

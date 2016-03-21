@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentProtobufNet.Configuration;
+using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Sources;
 using FluentProtobufNet.Tests.WCF;
 using NUnit.Framework;
 using ProtoBuf.Meta;
@@ -20,7 +23,7 @@ namespace FluentProtobufNet.Tests
             this._config =
                 Fluently.Configure()
                     .WithModel(this._model)
-                    .WithIndexor(Indexor.GetIndex)
+                    .WithIndexor(SeededIndexor.GetIndex)
                     .Mappings(
                         m =>
                         {
@@ -31,7 +34,7 @@ namespace FluentProtobufNet.Tests
             this.ShowResults();
         }
 
-        private Configuration _config;
+        private Configuration.Configuration _config;
         private RuntimeTypeModel _model;
         private IEnumerable<MetaType> _modelTypes;
 

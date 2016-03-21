@@ -10,7 +10,7 @@ namespace FluentProtobufNet.Specification
 
             if (isSatisfied)
             {
-                Console.WriteLine("satisfied with " + type.Name);
+                Console.WriteLine("satisfied that [" + type.Name + "] matches namespace of TClass [" + typeof (TClass).Namespace + "]");
             }
 
             return isSatisfied;

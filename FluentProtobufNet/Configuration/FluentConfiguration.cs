@@ -1,13 +1,13 @@
-namespace FluentProtobufNet
+using System;
+using System.Collections.Generic;
+using FluentProtobufNet.Logging;
+using ProtoBuf.Meta;
+
+namespace FluentProtobufNet.Configuration
 {
-    using System;
-    using System.Collections.Generic;
-
-    using ProtoBuf.Meta;
-
     public class FluentConfiguration
     {
-        private readonly Configuration cfg;
+        private readonly FluentProtobufNet.Configuration.Configuration cfg;
 
         private readonly IDiagnosticLogger logger;
 
@@ -18,17 +18,17 @@ namespace FluentProtobufNet
         private Func<object, int> indexor;
 
         internal FluentConfiguration()
-            : this(new Configuration())
+            : this(new FluentProtobufNet.Configuration.Configuration())
         {
         }
 
-        internal FluentConfiguration(Configuration cfg)
+        internal FluentConfiguration(FluentProtobufNet.Configuration.Configuration cfg)
         {
             this.cfg = cfg;
             this.logger = new NullDiagnosticsLogger();
         }
 
-        internal Configuration Configuration
+        internal FluentProtobufNet.Configuration.Configuration Configuration
         {
             get
             {
@@ -36,7 +36,7 @@ namespace FluentProtobufNet
             }
         }
 
-        public Configuration BuildConfiguration()
+        public FluentProtobufNet.Configuration.Configuration BuildConfiguration()
         {
             var mappingCfg = new MappingConfiguration(this.runtimeTypeModel, this.indexor);
 

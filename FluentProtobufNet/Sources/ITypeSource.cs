@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Sources
 {
     public interface ITypeSource
     {

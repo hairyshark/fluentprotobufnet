@@ -7,7 +7,7 @@ namespace FluentProtobufNet.Tests
 //    {
 //        public CategoryMap()
 //        {
-//            this.BuildUp<CategoryMap, Category>(Indexor.GetIndex);
+//            this.BuildUp<CategoryMap, Category>(SeededIndexor.GetIndex);
 //        }
 //    }
 //
@@ -15,7 +15,7 @@ namespace FluentProtobufNet.Tests
 //    {
 //        public CategoryWithDescriptionMap(int discriminator)
 //        {
-//            this.DynamicSubclassMap<CategoryWithDescriptionMap, CategoryWithDescription>(discriminator, Indexor.GetIndex);
+//            this.DynamicSubclassMap<CategoryWithDescriptionMap, CategoryWithDescription>(discriminator, SeededIndexor.GetIndex);
 //        }
 //    }
 //
@@ -23,7 +23,7 @@ namespace FluentProtobufNet.Tests
 //    {
 //        public CategoryThirdLevelMap(int discriminator)
 //        {
-//            this.DynamicSubclassMap<CategoryThirdLevelMap, CategoryThirdLevel>(discriminator, Indexor.GetIndex);
+//            this.DynamicSubclassMap<CategoryThirdLevelMap, CategoryThirdLevel>(discriminator, SeededIndexor.GetIndex);
 //        }
 //    }
 //
@@ -31,7 +31,7 @@ namespace FluentProtobufNet.Tests
 //    {
 //        public ItemMap()
 //        {
-//            this.BuildUp<ItemMap, Item>(Indexor.GetIndex);
+//            this.BuildUp<ItemMap, Item>(SeededIndexor.GetIndex);
 //        }
 //    }
 }

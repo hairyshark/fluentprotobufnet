@@ -7,10 +7,10 @@ namespace FluentProtobufNet.Specification
     using System;
     using System.Reflection;
 
-    public class ReferenceSpecification<TMessage> : ISpecification<PropertyInfo>
+    public class DatacontractReferenceSpecification<TMessage> : ISpecification<PropertyInfo>
         where TMessage : class
     {
-        public ReferenceSpecification()
+        public DatacontractReferenceSpecification()
         {
             this.DynamicType = typeof(TMessage).FullName;
         }

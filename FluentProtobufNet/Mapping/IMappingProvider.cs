@@ -1,6 +1,6 @@
 ﻿using ProtoBuf.Meta;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Mapping
 {
     public interface IMappingProvider
     {

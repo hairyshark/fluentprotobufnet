@@ -1,6 +1,6 @@
-﻿namespace FluentProtobufNet.Tests
+﻿namespace FluentProtobufNet.Mapping
 {
-    public static class Indexor
+    public static class SeededIndexor
     {
         private static volatile int _seed = 1;
 

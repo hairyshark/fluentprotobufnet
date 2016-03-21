@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using FluentProtobufNet.Helpers;
+using FluentProtobufNet.Logging;
 using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Specification;
 
-namespace FluentProtobufNet
+namespace FluentProtobufNet.Sources
 {
-    using FluentProtobufNet.Specification;
-
     public class AssemblyTypeSource<TSpecification> : ITypeSource
         where TSpecification : ISpecification<Type>, new()
     {

@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using FluentProtobufNet.Configuration;
+using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Sources;
 using FluentProtobufNet.Tests.Basic;
 
 namespace FluentProtobufNet.Tests
@@ -24,14 +27,14 @@ namespace FluentProtobufNet.Tests
             this._config =
                 Fluently.Configure()
                     .WithModel(this._model)
-                    .WithIndexor(Indexor.GetIndex)
+                    .WithIndexor(SeededIndexor.GetIndex)
                     .Mappings(m => m.FluentMappings.AddFromAssemblySource<TestBasicMapping, AssemblyTypeSource<NameSpaceSpecification<Category>>>())
                     .BuildConfiguration();
 
             this.ShowResults();
         }
 
-        private Configuration _config;
+        private Configuration.Configuration _config;
         private IEnumerable<MetaType> _modelTypes;
 
         private RuntimeTypeModel _model;
