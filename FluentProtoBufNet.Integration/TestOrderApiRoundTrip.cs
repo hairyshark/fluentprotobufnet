@@ -1,28 +1,20 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using FluentProtobufNet.Configuration;
+using FluentProtobufNet.Mapping;
 using FluentProtobufNet.Sources;
-using Insight.Messaging.OTC.OrderAPI.BusinessEntities;
+using FluentProtobufNet.Specification;
+using FluentProtobufNet.Tests;
+using Insight.Messaging.OTC.OrderAPI;
+using NUnit.Framework;
+using ProtoBuf;
+using ProtoBuf.Meta;
+using TradeReaderService;
 
-namespace TradeReaderService
+namespace FluentProtoBufNet.Integration
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
-    using FluentProtobufNet;
-    using FluentProtobufNet.Mapping;
-    using FluentProtobufNet.Specification;
-    using FluentProtobufNet.Tests;
-
-    using Insight.Messaging.OTC.OrderAPI;
-    using Insight.Messaging.OTC.OrderAPI.Data.Contract;
-
-    using NUnit.Framework;
-
-    using ProtoBuf;
-    using ProtoBuf.Meta;
-
     [TestFixture]
     public class TestOrderApiRoundTrip
     {
