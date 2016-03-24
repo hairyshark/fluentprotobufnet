@@ -1,35 +1,69 @@
-using System.Linq;
-using System.Runtime.Serialization;
-using FluentProtobufNet.Helpers;
-
 namespace FluentProtobufNet.Specification
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization;
 
-    public class DatacontractReferenceSpecification<TMessage> : ISpecification<PropertyInfo>
-        where TMessage : class
+    using Helpers;
+
+    public class DataContractReferenceSpecification : ISpecification<Type>
     {
-        public DatacontractReferenceSpecification()
+
+        private static readonly IList<Type> Cache = new List<Type>(); 
+
+        public bool IsSatisfied(Type type)
         {
-            this.DynamicType = typeof(TMessage).FullName;
+            if (Cache.Contains(type))
+            {
+                return true;
+            }
+
+            if (!type.IsDataContract())
+            {
+                return false;
+            }
+
+            if (Find(type))
+            {
+                Add(type);
+                return true;
+            }
+
+            // check base types
+            var baseType = type.BaseType;
+
+            while (baseType != null && baseType.BaseType != null)
+            {
+                if (Find(baseType))
+                {
+                    Add(baseType);
+                    return true;
+                }
+
+                baseType = baseType.BaseType;
+            }
+
+            return false;
         }
 
-        public string DynamicType { get; set; }
-
-        public bool IsSatisfied(PropertyInfo type)
+        private static void Add(Type type)
         {
-            var isDataContract = type.PropertyType.IsDataContract();
+            Console.WriteLine("Adding {0} to found Reference Types", type);
+            Cache.Add(type);
+        }
 
-            if (!isDataContract) return false;
+        private static bool Find(MemberInfo type)
+        {
+            var attrs = type.GetCustomAttributes<DataContractAttribute>(true);
 
-            var dc = type.PropertyType.GetCustomAttributes<DataContractAttribute>().FirstOrDefault();
+            return attrs.Any(CheckIt);
+        }
 
-            if (dc == null || !dc.IsReference) return false;
-
-            Console.WriteLine("satisfied that [" + type.PropertyType.Name + "] on member [" + this.DynamicType + "] is a Reference Type");
-
-            return true;
+        private static bool CheckIt(DataContractAttribute dataContractAttribute)
+        {
+            return dataContractAttribute.IsReference;
         }
     }
 }

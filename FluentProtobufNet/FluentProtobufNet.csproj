@@ -44,12 +44,13 @@
     <Compile Include="Mapping\DynamicClassMap.cs" />
     <Compile Include="Mapping\DynamicSubclassMap.cs" />
     <Compile Include="Specification\AnyDataContractSpecification.cs" />
+    <Compile Include="Specification\IsReferenceSpecification.cs" />
     <Compile Include="Specification\ISpecification.cs" />
     <Compile Include="Mapping\IMapBaseClasses.cs" />
     <Compile Include="Mapping\IMapSubClasses.cs" />
     <Compile Include="Mapping\WcfClassMap.cs" />
     <Compile Include="Specification\NameSpaceSpecification.cs" />
-    <Compile Include="Specification\DatacontractReferenceSpecification.cs" />
+    <Compile Include="Specification\DataContractReferenceSpecification.cs" />
     <Compile Include="Specification\SpecificDataContractSpecification.cs" />
     <Compile Include="Sources\WcfAssemblyTypeSource.cs" />
     <Compile Include="Sources\AssemblyTypeSource.cs" />
