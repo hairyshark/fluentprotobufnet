@@ -10,7 +10,6 @@
     {
         public TType Load<TType>(int id) where TType : class
         {
-
             var foo = new Execution(id);
 
             var dto = DataMapperFactory.Instance.DataMapper.MapExecution(foo);
