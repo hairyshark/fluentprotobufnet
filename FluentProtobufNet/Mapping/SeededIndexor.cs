@@ -8,5 +8,10 @@
         {
             return _seed++;
         }
+
+        public static  void Reset()
+        {
+            _seed = 1;
+        }
     }
 }

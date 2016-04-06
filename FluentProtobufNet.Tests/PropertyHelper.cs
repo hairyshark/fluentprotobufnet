@@ -1,3 +1,9 @@
+using System;
+using System.Linq;
+using FluentProtobufNet.Extraction;
+using FluentProtobufNet.Sources;
+using NUnit.Framework;
+
 namespace FluentProtobufNet.Tests
 {
     using System.Reflection;
@@ -17,6 +23,15 @@ namespace FluentProtobufNet.Tests
             }
 
             return sb.ToString();
+        }
+
+        public static void EnsureExists<TAssemblyType, TTypeSource>(this ModelBuilder<TAssemblyType, TTypeSource> modelBuilder, Type searchType)
+            where TAssemblyType : class
+            where TTypeSource : ITypeSource
+        {
+            var foundIt = modelBuilder.Descriptors.Any(descriptor => descriptor.MetaType.Type == searchType);
+
+            Assert.IsTrue(foundIt);
         }
     }
 }

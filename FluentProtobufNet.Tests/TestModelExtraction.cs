@@ -1,48 +1,42 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using FluentProtobufNet.Extraction;
+using FluentProtobufNet.Mapping;
+using FluentProtobufNet.Sources;
+using FluentProtobufNet.Specification;
+using FluentProtobufNet.Tests.Basic;
+using Insight.Messaging.OTC.OrderAPI;
+using Insight.Messaging.OTC.OrderAPI.Data;
+using Insight.Messaging.OTC.OrderAPI.Data.Allocation;
+using Microsoft.CSharp;
+using NUnit.Framework;
+
 namespace FluentProtobufNet.Tests
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-
-    using FluentProtobufNet.Extraction;
-    using FluentProtobufNet.Mapping;
-    using FluentProtobufNet.Sources;
-    using FluentProtobufNet.Specification;
-    using FluentProtobufNet.Tests.Basic;
-
-    using Insight.Messaging.OTC.OrderAPI;
-    using Insight.Messaging.OTC.OrderAPI.Data;
-    using Insight.Messaging.OTC.OrderAPI.Data.Allocation;
-
-    using Microsoft.CSharp;
-
-    using NUnit.Framework;
-
-    using ProtoBuf;
-
     [TestFixture]
     public class TestModelExtraction
     {
-        private const string ProtoExtension = ".proto";
-
         [SetUp]
         public void Setup()
         {
             SeededIndexor.Reset();
         }
 
+        private const string ProtoExtension = ".proto";
+
         private static string InternalTestCodeGen<TAssemblyType, TTypeSource>(
-            ModelBuilder<TAssemblyType, TTypeSource> modelBuilder, 
-            string outPath, 
-            string template, 
+            ModelBuilder<TAssemblyType, TTypeSource> modelBuilder,
+            string outPath,
+            string template,
             string defaultNameSpace,
             params string[] dependencies) where TAssemblyType : class where TTypeSource : ITypeSource
         {
             InternalTestBuildExtractProto(outPath + ProtoExtension, modelBuilder);
 
             var schema = modelBuilder.ExportSchema(outPath + ProtoExtension, dependencies);
-            
+
             var code = modelBuilder.CodeGenSchema(schema, template, defaultNameSpace);
 
             Assert.IsNotNull(code);
@@ -55,7 +49,7 @@ namespace FluentProtobufNet.Tests
         }
 
         private static void InternalTestBuildExtractProto<TAssemblyType, TTypeSource>(
-            string ProtoPath, 
+            string ProtoPath,
             ModelBuilder<TAssemblyType, TTypeSource> modelBuilder) where TAssemblyType : class
             where TTypeSource : ITypeSource
         {
@@ -99,11 +93,12 @@ namespace FluentProtobufNet.Tests
 
             const string OutPath = @".\TestCodeGenSchemaFromBasicTypes";
 
-            var code = InternalTestCodeGen(modelBuilder, OutPath, TemplateCSharp, "TestCodeGenSchemaFromBasicTypes", "bcl.proto");
+            var code = InternalTestCodeGen(modelBuilder, OutPath, TemplateCSharp, "TestCodeGenSchemaFromBasicTypes",
+                "bcl.proto");
 
             const string Version = "99.99.99.99";
 
-            var results = modelBuilder.Compile<CSharpCodeProvider>(null, code: code, version: Version, keyFile: "testFluent.snk");
+            var results = modelBuilder.Compile<CSharpCodeProvider>(null, code, Version, "testFluent.snk");
 
             Assert.IsNotNull(results);
 
@@ -129,11 +124,12 @@ namespace FluentProtobufNet.Tests
 
             const string OutPath = @".\TestCodeGenSchemaFromDataContractsInOrderApi";
 
-            var code = InternalTestCodeGen(modelBuilder, OutPath, TemplateCSharp, "TestCodeGenSchemaFromDataContractsInOrderApi", "bcl.proto");
+            var code = InternalTestCodeGen(modelBuilder, OutPath, TemplateCSharp,
+                "TestCodeGenSchemaFromDataContractsInOrderApi", "bcl.proto");
 
             const string Version = "66.66.66.66";
 
-            var results = modelBuilder.Compile<CSharpCodeProvider>(null, code: code, version: Version, keyFile: "testFluent.snk");
+            var results = modelBuilder.Compile<CSharpCodeProvider>(null, code, Version, "testFluent.snk");
 
             Assert.IsNotNull(results);
 
@@ -180,10 +176,10 @@ namespace FluentProtobufNet.Tests
             Assert.IsNotNull(modelBuilder.Descriptors);
             Assert.AreEqual(4, modelBuilder.Descriptors.Count());
 
-            modelBuilder.EnsureExists(typeof(Category));
-            modelBuilder.EnsureExists(typeof(CategoryWithDescription));
-            modelBuilder.EnsureExists(typeof(CategoryThirdLevel));
-            modelBuilder.EnsureExists(typeof(Item));
+            modelBuilder.EnsureExists(typeof (Category));
+            modelBuilder.EnsureExists(typeof (CategoryWithDescription));
+            modelBuilder.EnsureExists(typeof (CategoryThirdLevel));
+            modelBuilder.EnsureExists(typeof (Item));
         }
 
         [Test]
@@ -194,18 +190,18 @@ namespace FluentProtobufNet.Tests
             Assert.IsNotNull(modelBuilder.Descriptors);
             Assert.AreEqual(154, modelBuilder.Descriptors.Count());
 
-            modelBuilder.EnsureExists(typeof(Identifier));
-            modelBuilder.EnsureExists(typeof(ExecutionCancel));
-            modelBuilder.EnsureExists(typeof(ExecutionNew));
-            modelBuilder.EnsureExists(typeof(ExecutionUnwind));
-            modelBuilder.EnsureExists(typeof(AllocationBase));
-            modelBuilder.EnsureExists(typeof(ContractAllocationBase));
-            modelBuilder.EnsureExists(typeof(ContractUnwindAllocationBase));
-            modelBuilder.EnsureExists(typeof(OrderBase));           // base for knowm types not decorated as a Datacontact
-            modelBuilder.EnsureExists(typeof(OrderNew));            // subclass not decorated from OrderBase
-            modelBuilder.EnsureExists(typeof(OrderUnwindSearch));   // subclass not decorated from OrderBase
-            modelBuilder.EnsureExists(typeof(OrderCancel));         // subclass not decorated from OrderBase
-            modelBuilder.EnsureExists(typeof(OrderAcknowledge));    // subclass not decorated from OrderBase
+            modelBuilder.EnsureExists(typeof (Identifier));
+            modelBuilder.EnsureExists(typeof (ExecutionCancel));
+            modelBuilder.EnsureExists(typeof (ExecutionNew));
+            modelBuilder.EnsureExists(typeof (ExecutionUnwind));
+            modelBuilder.EnsureExists(typeof (AllocationBase));
+            modelBuilder.EnsureExists(typeof (ContractAllocationBase));
+            modelBuilder.EnsureExists(typeof (ContractUnwindAllocationBase));
+            modelBuilder.EnsureExists(typeof (OrderBase)); // base for knowm types not decorated as a Datacontact
+            modelBuilder.EnsureExists(typeof (OrderNew)); // subclass not decorated from OrderBase
+            modelBuilder.EnsureExists(typeof (OrderUnwindSearch)); // subclass not decorated from OrderBase
+            modelBuilder.EnsureExists(typeof (OrderCancel)); // subclass not decorated from OrderBase
+            modelBuilder.EnsureExists(typeof (OrderAcknowledge)); // subclass not decorated from OrderBase
         }
 
         [Test]
@@ -215,7 +211,7 @@ namespace FluentProtobufNet.Tests
 
             const string OutPath = @".\TestGenerateIndexFromBasicPropertyList";
 
-            var index = modelBuilder.GetIndex(OutPath, typeof(Category).Namespace + ".Index");
+            var index = modelBuilder.GetIndex(OutPath, typeof (Category).Namespace + ".Index");
 
             Assert.IsNotNull(index);
 
@@ -229,7 +225,7 @@ namespace FluentProtobufNet.Tests
 
             const string OutPath = @".\TestGenerateIndexFromDataContractsInOrderApi";
 
-            var index = modelBuilder.GetIndex(OutPath, typeof(ExecutionNew).Namespace + ".Index");
+            var index = modelBuilder.GetIndex(OutPath, typeof (ExecutionNew).Namespace + ".Index");
 
             Assert.IsNotNull(index);
 
