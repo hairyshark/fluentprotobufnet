@@ -1,31 +1,51 @@
 namespace FluentProtobufNet.Specification
 {
     using System;
+    using System.CodeDom;
+    using System.Collections.Generic;
 
-    public class IsReferenceSpecification<TMessage> : ISpecification<Type>
-        where TMessage : class
+    public class IsReferenceSpecification<T> : ISpecification<Type>
+        where T : class
     {
-        public string DynamicType { get; set; }
+        private static readonly IList<Type> Cache = new List<Type>();
 
         public IsReferenceSpecification()
         {
-            this.DynamicType = typeof(TMessage).FullName;
+            this.FullName = typeof(T).FullName;
         }
+
+        public string FullName { get; set; }
 
         public bool IsSatisfied(Type type)
         {
-            var test1 = typeof(TMessage).FullName == type.FullName;
+            if (Cache.Contains(type))
+            {
+                return true;
+            }
 
-            var isSatisfied = test1;
-
-            if (!isSatisfied)
+            if (typeof(IEnumerable<>).IsAssignableFrom(type))
             {
                 return false;
             }
 
-            Console.WriteLine("satisfied that [" + type.FullName + "] on member [" + this.DynamicType + "] is a Reference Type");
+            if (type.IsSubclassOf(typeof(T)))
+            {
+                Add(type);
+            }
 
-            return true;
+            if (type == typeof(T))
+            {
+                Add(type);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void Add(Type type)
+        {
+            Console.WriteLine(@"Adding {0} to found Reference descriptors", type);
+            Cache.Add(type);
         }
     }
 }
