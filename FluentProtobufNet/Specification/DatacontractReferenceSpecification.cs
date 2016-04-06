@@ -6,11 +6,10 @@ namespace FluentProtobufNet.Specification
     using System.Reflection;
     using System.Runtime.Serialization;
 
-    using Helpers;
+    using FluentProtobufNet.Helpers;
 
     public class DataContractReferenceSpecification : ISpecification<Type>
     {
-
         private static readonly IList<Type> Cache = new List<Type>(); 
 
         public bool IsSatisfied(Type type)
@@ -50,7 +49,7 @@ namespace FluentProtobufNet.Specification
 
         private static void Add(Type type)
         {
-            Console.WriteLine("Adding {0} to found Reference Types", type);
+            Console.WriteLine(@"Adding {0} to found Reference descriptors", type);
             Cache.Add(type);
         }
 
