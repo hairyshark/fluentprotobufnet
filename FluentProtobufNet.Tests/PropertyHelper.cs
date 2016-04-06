@@ -1,10 +1,7 @@
 namespace FluentProtobufNet.Tests
 {
-    using System;
     using System.Reflection;
     using System.Text;
-
-    using NUnit.Framework;
 
     public static class PropertyHelper
     {
@@ -20,11 +17,6 @@ namespace FluentProtobufNet.Tests
             }
 
             return sb.ToString();
-        }
-
-        public static void WithPropertyCount(this ModelDescriptor descriptor, int expected, BindingFlags flags = BindingFlags.Public | BindingFlags.Instance)
-        {
-            Assert.AreEqual(expected, descriptor.TypeSource.GetProperties(flags).Length);
         }
     }
 }

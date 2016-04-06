@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "protobuf-net", "protobuf-ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProtoBufNet.Integration", "FluentProtoBufNet.Integration\FluentProtoBufNet.Integration.csproj", "{17D71202-1F38-4D7F-903A-AA231BABAC0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoGen", "ProtoGen\ProtoGen.csproj", "{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CoreOnly|Any CPU = CoreOnly|Any CPU
@@ -87,6 +89,22 @@ Global
 		{17D71202-1F38-4D7F-903A-AA231BABAC0F}.Silverlight2|Any CPU.Build.0 = Release|Any CPU
 		{17D71202-1F38-4D7F-903A-AA231BABAC0F}.Unity|Any CPU.ActiveCfg = Release|Any CPU
 		{17D71202-1F38-4D7F-903A-AA231BABAC0F}.Unity|Any CPU.Build.0 = Release|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.CoreOnly|Any CPU.ActiveCfg = CoreOnly|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.CoreOnly|Any CPU.Build.0 = CoreOnly|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.iOS|Any CPU.ActiveCfg = iOS|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.iOS|Any CPU.Build.0 = iOS|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Net20|Any CPU.ActiveCfg = CoreOnly|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Net20|Any CPU.Build.0 = CoreOnly|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Profile|Any CPU.ActiveCfg = CoreOnly|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Profile|Any CPU.Build.0 = CoreOnly|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Silverlight2|Any CPU.ActiveCfg = CoreOnly|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Silverlight2|Any CPU.Build.0 = CoreOnly|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Unity|Any CPU.ActiveCfg = Unity|Any CPU
+		{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}.Unity|Any CPU.Build.0 = Unity|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

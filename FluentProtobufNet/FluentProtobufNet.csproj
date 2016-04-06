@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extraction\ModelBuilder.cs" />
+    <Compile Include="Extraction\ModelDescriptor.cs" />
     <Compile Include="Mapping\DynamicClassMap.cs" />
     <Compile Include="Mapping\DynamicSubclassMap.cs" />
     <Compile Include="Specification\AnyDataContractSpecification.cs" />
@@ -87,6 +89,10 @@
     <ProjectReference Include="..\protobuf-net\protobuf-net.csproj">
       <Project>{8374e4d7-2a91-48f1-9360-09b09cf27c3f}</Project>
       <Name>protobuf-net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProtoGen\ProtoGen.csproj">
+      <Project>{F6CBE303-3B5F-4CCC-B0B7-D81A6BD462C9}</Project>
+      <Name>ProtoGen</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
