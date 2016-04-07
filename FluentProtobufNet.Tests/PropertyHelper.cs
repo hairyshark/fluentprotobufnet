@@ -29,9 +29,11 @@ namespace FluentProtobufNet.Tests
             where TAssemblyType : class
             where TTypeSource : ITypeSource
         {
-            var foundIt = modelBuilder.Descriptors.Any(descriptor => descriptor.MetaType.Type == searchType);
+            var foundIt = modelBuilder.Find(typeSource);
 
-            Assert.IsTrue(foundIt);
+            Assert.IsNotNull(foundIt);
+
+            return foundIt;
         }
     }
 }
